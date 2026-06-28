@@ -188,6 +188,7 @@
         .achievement-card.unlocked {
             background: #FFFFFF;
             border: 1.5px solid var(--primary);
+            animation: shimmerShine 2.5s ease-in-out infinite;
         }
 
         .achievement-card.locked {
@@ -592,7 +593,7 @@
             width: 100%;
             height: 140px;
             background: #FFF5F7;
-            border: 1.5px dashed #E2B6C3;
+            border: none;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -600,7 +601,8 @@
             margin-bottom: 14px;
             position: relative;
             overflow: hidden;
-            cursor: pointer;
+            cursor: default;
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
         }
 
         .shop-item-image img {
@@ -608,17 +610,6 @@
             height: 100%;
             object-fit: cover;
             border-radius: 10px;
-        }
-
-        .shop-image-input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 10;
         }
 
         .shop-item-name {
@@ -952,6 +943,446 @@
             background: var(--primary);
             transform: translateY(-2px);
         }
+
+        /* === RESPONSIVE MOBILE === */
+        /* === CORAZÓN ESPECIAL CON FORMA REAL === */
+        .heart-section {
+            text-align: center;
+            margin-top: 60px;
+            margin-bottom: 40px;
+        }
+
+        .heart-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .heart {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.92);
+            border: 2px solid rgba(255, 182, 193, 0.5);
+            box-shadow: 0 8px 32px rgba(168, 84, 108, 0.15);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            /* Forma de corazón */
+            clip-path: polygon(
+                50% 100%,
+                100% 50%,
+                100% 38%,
+                85% 23%,
+                70% 15%,
+                50% 28%,
+                30% 15%,
+                15% 23%,
+                0% 38%,
+                0% 50%
+            );
+        }
+
+        .heart:hover {
+            border-color: var(--primary);
+            box-shadow: 0 12px 40px rgba(168, 84, 108, 0.25);
+            transform: scale(1.08);
+        }
+
+        .heart-placeholder {
+            font-size: 6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            animation: none;
+        }
+
+        .heart img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            clip-path: polygon(
+                50% 100%,
+                100% 50%,
+                100% 38%,
+                85% 23%,
+                70% 15%,
+                50% 28%,
+                30% 15%,
+                15% 23%,
+                0% 38%,
+                0% 50%
+            );
+        }
+
+        .heart-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* Animación de latido LENTO - Solo si tiene imagen */
+        .heart.with-image {
+            animation: heartbeatSlow 1.8s ease-in-out infinite, shimmerShine 2.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeatSlow {
+            0% {
+                transform: scale(1);
+            }
+            15% {
+                transform: scale(1.15);
+            }
+            30% {
+                transform: scale(1);
+            }
+            45% {
+                transform: scale(1.18);
+            }
+            60% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .heart-label {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .heart.with-image + .heart-label {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .heart-section {
+                margin-top: 40px;
+                margin-bottom: 30px;
+            }
+
+            .heart {
+                width: 140px;
+                height: 140px;
+            }
+
+            .heart-placeholder {
+                font-size: 4.5rem;
+            }
+
+            .heart-label {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .heart-section {
+                margin-top: 30px;
+                margin-bottom: 20px;
+            }
+
+            .heart {
+                width: 110px;
+                height: 110px;
+            }
+
+            .heart-placeholder {
+                font-size: 3.5rem;
+            }
+
+            .heart-label {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px 16px;
+            }
+
+            .container {
+                max-width: 100%;
+            }
+
+            .global-header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 20px;
+                margin-bottom: 20px;
+            }
+
+            .header-title {
+                font-size: 1.3rem;
+            }
+
+            .coins-counter {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 6px;
+                margin-bottom: 20px;
+            }
+
+            .nav-tab {
+                flex: 1;
+                min-width: 80px;
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+
+            .achievements-grid,
+            .tasks-grid,
+            .shop-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+
+            .achievement-card {
+                padding: 16px;
+            }
+
+            .achievement-card .badge-container {
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
+            }
+
+            .achievement-card .badge-img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .achievement-title {
+                font-size: 0.9rem;
+            }
+
+            .achievement-description {
+                font-size: 0.8rem;
+            }
+
+            .task-card {
+                padding: 14px;
+            }
+
+            .task-title {
+                font-size: 0.9rem;
+            }
+
+            .task-description {
+                font-size: 0.8rem;
+            }
+
+            .shop-item {
+                padding: 16px;
+            }
+
+            .shop-item-name {
+                font-size: 0.95rem;
+            }
+
+            .shop-item-description {
+                font-size: 0.8rem;
+                min-height: 30px;
+            }
+
+            .buy-button {
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+
+            .modal-content {
+                padding: 20px;
+                max-width: 90%;
+            }
+
+            .modal-title {
+                font-size: 1.2rem;
+            }
+
+            .modal-message {
+                font-size: 0.9rem;
+            }
+
+            .wheel-container {
+                padding: 20px;
+            }
+
+            .wheel-title {
+                font-size: 1.3rem;
+            }
+
+            .wheel-canvas {
+                width: 200px;
+                height: 200px;
+            }
+
+            #wheelCanvas {
+                width: 200px !important;
+                height: 200px !important;
+            }
+
+            .spin-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+
+            .tasks-banner {
+                padding: 16px;
+                margin-bottom: 20px;
+            }
+
+            .banner-title {
+                font-size: 1.3rem;
+            }
+
+            .banner-subtitle {
+                font-size: 0.85rem;
+            }
+
+            .banner-stats {
+                gap: 12px;
+            }
+
+            .stat-item {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px 12px;
+            }
+
+            .global-header {
+                gap: 12px;
+                padding: 12px 16px;
+            }
+
+            .header-title {
+                font-size: 1.1rem;
+            }
+
+            .coins-counter {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+
+            .coins-icon {
+                font-size: 1.3rem;
+            }
+
+            .coins-value {
+                font-size: 1.1rem;
+                min-width: 40px;
+            }
+
+            .nav-tabs {
+                gap: 4px;
+                padding: 4px;
+            }
+
+            .nav-tab {
+                padding: 8px 10px;
+                font-size: 0.75rem;
+                min-width: 60px;
+            }
+
+            .achievement-card,
+            .task-card,
+            .shop-item {
+                padding: 12px;
+            }
+
+            .achievement-title,
+            .shop-item-name {
+                font-size: 0.85rem;
+            }
+
+            .achievement-description,
+            .task-description,
+            .shop-item-description {
+                font-size: 0.75rem;
+            }
+
+            .achievement-reward {
+                font-size: 0.75rem;
+            }
+
+            .buy-button {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+
+            .modal-content {
+                padding: 16px;
+            }
+
+            .modal-title {
+                font-size: 1rem;
+            }
+
+            .modal-message {
+                font-size: 0.85rem;
+            }
+
+            .wheel-canvas {
+                width: 150px;
+                height: 150px;
+            }
+
+            #wheelCanvas {
+                width: 150px !important;
+                height: 150px !important;
+            }
+
+            .wheel-title {
+                font-size: 1.1rem;
+            }
+
+            .spin-button {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+
+            .tasks-banner {
+                padding: 12px;
+            }
+
+            .banner-title {
+                font-size: 1.1rem;
+            }
+
+            .banner-subtitle {
+                font-size: 0.75rem;
+            }
+
+            .stat-item {
+                font-size: 0.7rem;
+            }
+
+            .stat-value {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -982,6 +1413,17 @@
         <!-- Sección Logros -->
         <div id="achievements" class="section active">
             <div class="achievements-grid" id="achievementsGrid"></div>
+            
+            <!-- Corazón Especial -->
+            <div class="heart-section">
+                <div class="heart-container">
+                    <div class="heart" id="heartImage">
+                        <span class="heart-placeholder">📷</span>
+                        <input type="file" class="heart-input" accept="image/*" id="heartInput" onchange="handleHeartUpload(event)">
+                    </div>
+                </div>
+                <div class="heart-label">Y SOMOS NOVIOS.. Y NOS AMAMOS.. Y NOS BESAMOS...</div>
+            </div>
         </div>
 
         <!-- Sección Tareas -->
@@ -1152,10 +1594,6 @@
                     : `<span style="font-size: 1.8rem;">⭐</span>`;
 
                 card.innerHTML = `
-                    <div class="image-container ${!imageSrc ? 'no-image' : ''}">
-                        ${imageHTML}
-                        <input type="file" class="image-input-wrapper" accept="image/*" onchange="handleImageUpload(event, ${index})">
-                    </div>
                     <div class="achievement-content">
                         <div class="badge-container">
                             ${badgeHTML}
@@ -1217,9 +1655,8 @@
                     ${item.purchased ? '<div class="purchased-badge">✓ Comprado</div>' : ''}
                     <div class="shop-item-image ${!imageSrc ? '' : ''}">
                         ${imageHTML}
-                        <input type="file" class="shop-image-input" accept="image/*" onchange="handleShopImageUpload(event, ${index})">
                     </div>
-                    <div class="shop-item-name" onclick="showShopImage(${index}, '${item.name}', '${imageSrc ? imageSrc.replace(/'/g, "\\'") : ''}')" style="cursor: pointer;">${item.name}</div>
+                    <div class="shop-item-name">${item.name}</div>
                     <div class="shop-item-description">${item.description}</div>
                     <div class="shop-item-price">
                         <span>🟡 ${item.price}</span>
@@ -1560,7 +1997,7 @@
             if (allTasksCompleted && tasks.length > 0) {
                 const hasShownTasksWheel = localStorage.getItem('shown_tasks_wheel_v1') === 'true';
                 if (!hasShownTasksWheel) {
-                    showWheelModal('¡COMPLETASTE TODAS LAS TAREAS!');
+                    showWheelModal('¡COMPLETASTE TODAS LAS FUKIN TAREAS!');
                     localStorage.setItem('shown_tasks_wheel_v1', 'true');
                     return;
                 }
@@ -1618,8 +2055,71 @@
             }, 2000);
         }
 
+        // ===== FUNCIÓN CORAZÓN ESPECIAL =====
+        function handleHeartUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const heartImage = document.getElementById('heartImage');
+                    const heartPlaceholder = heartImage.querySelector('.heart-placeholder');
+                    let existingImg = heartImage.querySelector('img');
+                    
+                    // Guardar en localStorage
+                    localStorage.setItem('heart_image_v1', e.target.result);
+                    
+                    if (existingImg) {
+                        // Si ya existe una imagen, reemplazarla
+                        existingImg.src = e.target.result;
+                    } else {
+                        // Si no existe, crear nueva
+                        if (heartPlaceholder) {
+                            heartPlaceholder.remove();
+                        }
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = 'Heart';
+                        heartImage.appendChild(img);
+                    }
+                    
+                    // Agregar clase para animación
+                    heartImage.classList.add('with-image');
+                    
+                    // Resetear el input para poder seleccionar el mismo archivo otra vez
+                    document.getElementById('heartInput').value = '';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Cargar corazón al iniciar
+        function loadHeartImage() {
+            const savedHeartImage = localStorage.getItem('heart_image_v1');
+            if (savedHeartImage) {
+                const heartImage = document.getElementById('heartImage');
+                const heartPlaceholder = heartImage.querySelector('.heart-placeholder');
+                
+                if (heartPlaceholder) {
+                    heartPlaceholder.remove();
+                }
+                
+                let existingImg = heartImage.querySelector('img');
+                if (existingImg) {
+                    existingImg.src = savedHeartImage;
+                } else {
+                    const img = document.createElement('img');
+                    img.src = savedHeartImage;
+                    img.alt = 'Heart';
+                    heartImage.appendChild(img);
+                }
+                
+                heartImage.classList.add('with-image');
+            }
+        }
+
         // Inicializar
         loadData();
+        loadHeartImage();
         updateAllDisplay();
         drawWheel();
     </script>
