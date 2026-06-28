@@ -385,12 +385,18 @@
             color: var(--text-muted);
             margin-bottom: 8px;
             cursor: pointer;
-            transition: color 0.2s;
+            transition: filter 0.4s ease, color 0.2s;
             line-height: 1.4;
+            filter: blur(4px);
+        }
+
+        .achievement-card.unlocked .achievement-description {
+            filter: blur(0px);
         }
 
         .achievement-card.locked .achievement-description {
             color: #A8959B;
+            filter: blur(4px);
         }
 
         .achievement-description:hover {
@@ -1418,11 +1424,11 @@
             <div class="heart-section">
                 <div class="heart-container">
                     <div class="heart" id="heartImage">
-                        <span class="heart-placeholder">📷</span>
+                        <span class="heart-placeholder">💕</span>
                         <input type="file" class="heart-input" accept="image/*" id="heartInput" onchange="handleHeartUpload(event)">
                     </div>
                 </div>
-                <div class="heart-label">Y SOMOS NOVIOS.. Y NOS AMAMOS.. Y NOS BESAMOS...</div>
+                <div class="heart-label">Clic en el corazón para agregar tu imagen</div>
             </div>
         </div>
 
@@ -1997,7 +2003,7 @@
             if (allTasksCompleted && tasks.length > 0) {
                 const hasShownTasksWheel = localStorage.getItem('shown_tasks_wheel_v1') === 'true';
                 if (!hasShownTasksWheel) {
-                    showWheelModal('¡COMPLETASTE TODAS LAS FUKIN TAREAS!');
+                    showWheelModal('¡COMPLETASTE TODAS LAS TAREAS!');
                     localStorage.setItem('shown_tasks_wheel_v1', 'true');
                     return;
                 }
