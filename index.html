@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Completo de Logros, Tareas y Tienda</title>
+    <title>5° ANIVERSARIO</title>
     <style>
         :root {
             --bg-page: linear-gradient(135deg, #FFF0F5 0%, #FDE4ED 50%, #F5D6E1 100%);
@@ -84,6 +84,25 @@
         @keyframes coinPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.18) rotate(6deg); }
+        }
+
+        /* === ANIMACIÓN DE BRILLO CROMADO === */
+        @keyframes shimmerShine {
+            0% {
+                background: linear-gradient(90deg, #FFF0F5 0%, #FFF0F5 40%, rgba(255,255,255,0.8) 50%, #FFF0F5 60%, #FFF0F5 100%);
+                background-size: 200% 100%;
+                background-position: 200% 0;
+            }
+            50% {
+                background: linear-gradient(90deg, #FFF0F5 0%, #FFF0F5 40%, rgba(255,255,255,0.9) 50%, #FFF0F5 60%, #FFF0F5 100%);
+                background-size: 200% 100%;
+                background-position: -200% 0;
+            }
+            100% {
+                background: linear-gradient(90deg, #FFF0F5 0%, #FFF0F5 40%, rgba(255,255,255,0.8) 50%, #FFF0F5 60%, #FFF0F5 100%);
+                background-size: 200% 100%;
+                background-position: 200% 0;
+            }
         }
 
         .coins-value {
@@ -175,6 +194,28 @@
             background: rgba(255, 255, 255, 0.65);
         }
 
+        .achievement-card.hidden-achievement {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(168, 84, 108, 0.08);
+        }
+
+        .achievement-card.hidden-achievement .badge-container {
+            filter: blur(4px);
+            background: #2a2a2a;
+            border-color: #404040;
+        }
+
+        .achievement-card.hidden-achievement .achievement-description {
+            filter: blur(5px);
+            user-select: none;
+            color: rgba(132, 114, 119, 0.5);
+        }
+
+        .achievement-card.hidden-achievement.unlocked .achievement-description {
+            filter: none;
+            color: var(--text-muted);
+        }
+
         .image-container {
             width: 100%;
             height: 150px;
@@ -189,431 +230,948 @@
             overflow: hidden;
         }
 
-        /* Corrección para sobreescribir el estilo en línea de tu JS */
         .hidden-achievement .image-container {
             background: #FFF0F5 !important;
         }
 
         .image-container img {
-            width: 100%; height: 100%; object-fit: cover; border-radius: 10px;
+            width: 100%;
+            height: 100%; object-fit: cover; border-radius: 10px;
         }
 
         .image-container.no-image {
-            color: #A38C93; font-size: 0.85rem; font-weight: 500;
+            color: #A38C93;
+            font-size: 0.85rem; font-weight: 500;
         }
 
         .image-input-wrapper {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; cursor: pointer; z-index: 10;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0; opacity: 0; cursor: pointer; z-index: 10;
         }
 
-        .badge-img {
+        /* === NUEVOS ESTILOS PARA INSIGNIAS CIRCULARES Y DESENFOCADAS === */
+        .badge-container {
+            position: relative;
             width: 54px;
             height: 54px;
-            border-radius: 14px;
-            object-fit: cover;
             margin-right: 14px;
             flex-shrink: 0;
-            transition: filter 0.3s ease;
-            background: #F9ECEF;
-            padding: 4px;
-            border: 1px solid #EAE0E3;
+            border-radius: 50%;
+            background: #FFF0F5;
+            border: 2px solid #E2B6C3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.25s ease;
         }
 
-        .achievement-card.locked .badge-img {
-            filter: grayscale(1) opacity(0.45);
+        .badge-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background: linear-gradient(90deg, transparent 0%, transparent 40%, rgba(255,255,255,0) 50%, transparent 60%, transparent 100%);
+            background-size: 200% 100%;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 10;
         }
 
-        .card-content { display: flex; align-items: flex-start; flex: 1; }
-        .card-text { flex: 1; min-width: 0; }
+        .achievement-card.unlocked .badge-container::after {
+            animation: shimmerShine 3s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        .achievement-card.locked .badge-container {
+            filter: brightness(0.6) grayscale(100%);
+        }
+
+        .achievement-card.unlocked .badge-container {
+            box-shadow: inset 0 2px 12px rgba(255, 255, 255, 0.4), 0 4px 12px rgba(168, 84, 108, 0.2);
+        }
+
+        .achievement-card.unlocked .badge-container img {
+            filter: saturate(1.4) brightness(1.15) contrast(1.1);
+        }
+
+        .achievement-card.hidden-achievement .badge-container {
+            filter: blur(5px) brightness(0.6) grayscale(100%);
+            background: #2a2a2a;
+            border-color: #404040;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .achievement-card.hidden-achievement .badge-container::after {
+            animation: none !important;
+            opacity: 0 !important;
+        }
+
+        .achievement-card.hidden-achievement.unlocked .badge-container {
+            filter: none;
+            background: #FFF0F5;
+            border-color: #E2B6C3;
+            box-shadow: inset 0 2px 12px rgba(255, 255, 255, 0.4), 0 4px 12px rgba(168, 84, 108, 0.2);
+        }
+
+        .achievement-card.hidden-achievement.unlocked .badge-container::after {
+            animation: shimmerShine 3s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        .badge-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .badge-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 20;
+            border-radius: 50%;
+        }
+
+        .achievement-content {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .achievement-text {
+            flex: 1;
+        }
 
         .achievement-title {
-            font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: color 0.2s;
         }
 
-        .achievement-desc {
-            font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.45;
+        .achievement-card.locked .achievement-title {
+            color: #A8A39C;
+            font-weight: 600;
         }
 
-        .achievement-stats {
-            display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid #F5EBEF; font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: auto;
+        .achievement-title:hover {
+            color: var(--primary);
         }
 
-        .checkbox { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
-
-        .locked-overlay {
-            position: absolute; top: 14px; right: 14px; background: #F4E3E8; color: #9C6C7B; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; z-index: 5;
+        .achievement-title input {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid var(--primary-soft);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
         }
 
-        .achievement-card.unlocked .locked-overlay { display: none; }
+        .achievement-description {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1.4;
+        }
+
+        .achievement-card.locked .achievement-description {
+            color: #A8959B;
+        }
+
+        .achievement-description:hover {
+            color: var(--primary);
+        }
+
+        .achievement-description input {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid var(--primary-soft);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .achievement-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .achievement-reward {
+            display: inline-block;
+            background: linear-gradient(135deg, #FFF0F3, #FFE3EC);
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 12px;
+            border: 1px solid #D6879E;
+        }
 
         /* === TAREAS === */
-        .tasks-banner {
-            background: linear-gradient(135deg, #A8546C 0%, #BA6A81 50%, #CD8398 100%);
-            color: #FFFFFF;
-            padding: 32px 28px;
-            border-radius: 22px;
-            margin-bottom: 35px;
-            box-shadow: 0 12px 30px rgba(168, 84, 108, 0.28);
-            position: relative;
-            overflow: hidden;
-            border: none;
+        .tasks-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
         }
-
-        .tasks-banner::after {
-            content: ''; position: absolute; top: -50%; right: -10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; pointer-events: none;
-        }
-
-        .banner-title { font-size: 1.9rem; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
-        .banner-subtitle { font-size: 0.95rem; opacity: 0.9; margin-bottom: 22px; }
-
-        .banner-stats {
-            display: flex; gap: 28px; flex-wrap: wrap; background: rgba(0,0,0,0.12); padding: 14px 20px; border-radius: 14px; backdrop-filter: blur(4px);
-        }
-
-        .stat-item { display: flex; align-items: center; gap: 8px; font-size: 0.92rem; }
-        .stat-value { font-weight: 800; font-size: 1.25rem; color: #FFF; }
-
-        .tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 
         .task-card {
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; transition: all 0.25s ease; box-shadow: var(--shadow-md); display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-md);
         }
 
         .task-card:hover {
-            border-color: var(--primary-soft); box-shadow: var(--shadow-lg); transform: translateY(-3px);
+            border-color: var(--primary-soft);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
         }
 
         .task-card.completed {
-            background: rgba(255, 255, 255, 0.5); border-color: rgba(168, 84, 108, 0.1); opacity: 0.65;
+            background: #FFFFFF;
+            border: 1.5px solid var(--primary);
         }
 
-        .task-card.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
-
-        .task-header { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px; }
-        .task-checkbox { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--primary); cursor: pointer; margin-top: 2px; flex-shrink: 0; }
-        .task-title { font-weight: 700; color: var(--text-main); font-size: 1rem; }
-        .task-description { font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4; }
-
-        .task-difficulty {
-            display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px; color: #FFFFFF; align-self: flex-start;
+        .task-card.completed .task-title {
+            text-decoration: line-through;
+            opacity: 0.7;
         }
 
-        /* Paleta Pastel Profesional */
-        .difficulty-easy { background: #5EC286; }
-        .difficulty-medium { background: #EBA059; }
-        .difficulty-hard { background: #E66767; }
+        .task-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .task-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: color 0.2s;
+            flex: 1;
+        }
+
+        .task-title:hover {
+            color: var(--primary);
+        }
+
+        .task-title input {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid var(--primary-soft);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+        }
+
+        .task-description {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1.4;
+        }
+
+        .task-description:hover {
+            color: var(--primary);
+        }
+
+        .task-description input {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid var(--primary-soft);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
 
         .task-reward {
-            display: flex; align-items: center; gap: 6px; font-weight: 800; color: var(--primary); font-size: 0.95rem; margin-top: auto; padding-top: 10px; border-top: 1px dashed #F2E4E8;
+            display: inline-block;
+            background: linear-gradient(135deg, #FFF0F3, #FFE3EC);
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #D6879E;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary);
         }
 
         /* === TIENDA === */
-        #shop h2 { color: var(--text-main) !important; }
-        
-        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
-
-        .shop-item {
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 22px; text-align: center; transition: all 0.3s ease; position: relative; box-shadow: var(--shadow-md); display: flex; flex-direction: column;
+        .shop-header {
+            margin-bottom: 24px;
         }
 
-        .shop-item:hover {
-            border-color: var(--primary); box-shadow: var(--shadow-lg); transform: translateY(-5px);
+        .shop-info {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .shop-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        .shop-item:hover:not(.purchased) {
+            border-color: var(--primary-soft);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .shop-item.purchased {
+            background: #F8F5F5;
+            border-color: var(--primary);
+            opacity: 0.75;
+        }
+
+        .purchased-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--primary);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            z-index: 5;
         }
 
         .shop-item-image {
-            width: 100%; height: 160px; background: #FFF5F7; border: 1.5px dashed #E2B6C3; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; overflow: hidden;
+            width: 100%;
+            height: 140px;
+            background: #FFF5F7;
+            border: 1.5px dashed #E2B6C3;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
         }
 
-        .shop-item-image img { width: 100%; height: 100%; object-fit: cover; }
-        .shop-item-name { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
-        .shop-item-description { font-size: 0.86rem; color: var(--text-muted); margin-bottom: 18px; flex: 1; display: flex; align-items: center; justify-content: center; }
-        .shop-item-price { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 16px; }
+        .shop-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .shop-image-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .shop-item-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .shop-item-name:hover {
+            color: var(--primary);
+        }
+
+        .shop-item-name input {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid var(--primary-soft);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+        }
+
+        .shop-item-description {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1.4;
+        }
+
+        .shop-item-description:hover {
+            color: var(--primary);
+        }
+
+        .shop-item-description input {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1px solid var(--primary-soft);
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .shop-item-price {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
 
         .buy-button {
-            width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary), #C1738A); color: #FFFFFF; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(168, 84, 108, 0.2);
+            width: 100%;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, var(--primary), #BD6B82);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 4px 15px rgba(168, 84, 108, 0.2);
         }
 
         .buy-button:hover:not(:disabled) {
-            transform: translateY(-2px); box-shadow: 0 6px 16px rgba(168, 84, 108, 0.35); background: linear-gradient(135deg, var(--primary-hover), #AF5F76);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(168, 84, 108, 0.3);
         }
 
-        .buy-button:disabled { background: #E5D5DA; color: #9C8B90; box-shadow: none; cursor: not-allowed; }
-        .shop-item.purchased { opacity: 0.7; border-color: #EAE0E3; }
-
-        .purchased-badge {
-            position: absolute; top: 14px; right: 14px; background: var(--text-main); color: #FFFFFF; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.5px; z-index: 2;
-        }
-
-        /* === ANIMACIONES === */
-        .coin-animation {
-            position: fixed; font-size: 1.6rem; font-weight: 800; color: #E6A15C; text-shadow: 0 2px 8px rgba(230, 161, 92, 0.4); pointer-events: none; z-index: 1000; animation: coinFloat 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-
-        @keyframes coinFloat {
-            0% { opacity: 1; transform: translateY(0) scale(0.8); }
-            50% { transform: translateY(-45px) scale(1.1); }
-            100% { opacity: 0; transform: translateY(-70px) scale(0.9); }
-        }
-
-        .float-particle {
-            position: fixed; pointer-events: none; z-index: 999; font-size: 1.5rem; animation: floatUp 1.5s ease-out forwards;
-        }
-
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-60px) scale(0.8); }
+        .buy-button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
         }
 
         /* === MODAL === */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(45, 31, 36, 0.45); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
-        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
         .modal-content {
-            background: #FFFFFF; border-radius: 24px; padding: 42px 36px; text-align: center; max-width: 440px; width: 90%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 2px solid var(--primary-soft); animation: modalBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: slideUp 0.3s ease;
         }
 
-        @keyframes modalBounce {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .modal-title { font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-bottom: 12px; }
-        .modal-message { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 28px; line-height: 1.5; }
-
-        .modal-close {
-            background: var(--text-main); color: #FFFFFF; border: none; padding: 14px 32px; border-radius: 12px; cursor: pointer; font-weight: 700; transition: all 0.2s ease; width: 100%;
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 12px;
         }
 
-        .modal-close:hover { background: var(--primary); }
-
-        .editable { cursor: text; border-radius: 6px; padding: 2px 6px; transition: background 0.2s ease; }
-        .editable:hover { background: #FFF0F3; outline: 1px dashed #D6879E; }
-
-        input[type="text"] {
-            width: 100%; background: #FFF0F3; border: 1.5px solid var(--primary); color: var(--text-main); padding: 6px 10px; border-radius: 6px; font-family: inherit; font-size: inherit; font-weight: 600;
+        .modal-message {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            line-height: 1.6;
         }
 
-        input[type="text"]:focus {
-            outline: none; background: #FFFFFF; box-shadow: 0 0 0 3px rgba(168, 84, 108, 0.2);
+        .modal-button {
+            background: linear-gradient(135deg, var(--primary), #BD6B82);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 4px 15px rgba(168, 84, 108, 0.2);
         }
 
-        @media (max-width: 768px) {
-            .achievements-grid, .tasks-grid, .shop-grid { grid-template-columns: 1fr; }
-            .global-header { flex-direction: column; gap: 16px; text-align: center; }
-            .nav-tabs { flex-direction: column; }
+        .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(168, 84, 108, 0.3);
+        }
+
+        /* === ANIMACIÓN DE MONEDAS === */
+        .coin-animation {
+            position: fixed;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--primary);
+            pointer-events: none;
+            z-index: 999;
+            animation: coinFloat 1.5s ease-out forwards;
+        }
+
+        @keyframes coinFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-60px) scale(0.8);
+            }
+        }
+
+        /* === RULETA === */
+        .wheel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .wheel-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .wheel-container {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.4s ease;
+        }
+
+        .wheel-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .wheel-canvas {
+            margin: 0 auto 24px;
+            max-width: 300px;
+        }
+
+        .spin-button {
+            background: linear-gradient(135deg, var(--primary), #BD6B82);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(168, 84, 108, 0.25);
+            margin-bottom: 16px;
+        }
+
+        .spin-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(168, 84, 108, 0.35);
+        }
+
+        .spin-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .wheel-prize {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 16px;
+            min-height: 30px;
+        }
+
+        .close-wheel {
+            background: var(--text-muted);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.25s;
+            margin-top: 12px;
+        }
+
+        .close-wheel:hover {
+            background: var(--primary);
+        }
+
+        /* === MODAL DE IMAGEN DE TIENDA === */
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .image-modal-content {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.4s ease;
+        }
+
+        .image-modal-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 24px;
+        }
+
+        .image-modal-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .image-modal-close {
+            background: var(--text-muted);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.25s;
+        }
+
+        .image-modal-close:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header Global -->
         <div class="global-header">
-            <h1 class="header-title">✨ Sistema Completo</h1>
-            <div class="coins-counter">
-                <span class="coins-icon">💰</span>
-                <span class="coins-value" id="totalCoins">0</span>
-            </div>
-        </div>
-
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="switchTab('achievements')">🏆 Logros</button>
-            <button class="nav-tab" onclick="switchTab('tasks')">✅ Tareas</button>
-            <button class="nav-tab" onclick="switchTab('shop')">🛍️ Tienda</button>
-        </div>
-
-        <section class="section active" id="achievements">
-            <div class="achievements-grid" id="achievementsGrid"></div>
-        </section>
-
-        <section class="section" id="tasks">
-            <div class="tasks-banner">
-                <div class="banner-title">📋 Mis Tareas</div>
-                <div class="banner-subtitle">Completa tareas para ganar monedas</div>
-                <div class="banner-stats">
-                    <div class="stat-item">
-                        <span>Completadas:</span>
-                        <span class="stat-value" id="tasksCompleted">0</span>
-                        <span>/ <span id="totalTasks">30</span></span>
-                    </div>
-                    <div class="stat-item">
-                        <span>Monedas ganadas en tareas:</span>
-                        <span class="stat-value" id="tasksCoins">0</span>
-                    </div>
+            <h1 class="header-title">5° ANIVERSARIO</h1>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div class="coins-counter">
+                    <span class="coins-icon">💲</span>
+                    <span class="coins-value" id="coinsDisplay">0</span>
                 </div>
+                <button onclick="showResetConfirmation()" style="background: #E85D75; color: white; border: none; padding: 10px 18px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.25s; box-shadow: 0 4px 12px rgba(232, 93, 117, 0.2);" 
+                    onmouseover="this.style.boxShadow='0 6px 16px rgba(232, 93, 117, 0.3)'; this.style.transform='translateY(-2px)';"
+                    onmouseout="this.style.boxShadow='0 4px 12px rgba(232, 93, 117, 0.2)'; this.style.transform='translateY(0)';">
+                    Restablecer
+                </button>
             </div>
-            <div class="tasks-grid" id="tasksGrid"></div>
-        </section>
+        </div>
 
-        <section class="section" id="shop">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h2 style="font-size: 1.8rem; color: #1A1416; margin-bottom: 8px;">🛍️ Tienda</h2>
-                <p style="color: #736368;">Compra objetos con tus monedas ganadas</p>
+        <!-- Navegación (Tabs) -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('achievements')">Logros</button>
+            <button class="nav-tab" onclick="switchTab('tasks')">Tareas</button>
+            <button class="nav-tab" onclick="switchTab('shop')">Tienda</button>
+        </div>
+
+        <!-- Sección Logros -->
+        <div id="achievements" class="section active">
+            <div class="achievements-grid" id="achievementsGrid"></div>
+        </div>
+
+        <!-- Sección Tareas -->
+        <div id="tasks" class="section">
+            <div class="tasks-container" id="tasksGrid"></div>
+        </div>
+
+        <!-- Sección Tienda -->
+        <div id="shop" class="section">
+            <div class="shop-header">
+                <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">🛍️ Tienda de Premios</h2>
+                <div class="shop-info">Gasta tus monedas ganadas en artículos exclusivos</div>
             </div>
             <div class="shop-grid" id="shopGrid"></div>
-        </section>
+        </div>
     </div>
 
-    <div class="modal-overlay" id="modal">
+    <!-- Modal Global -->
+    <div class="modal" id="modal">
         <div class="modal-content">
-            <div class="modal-title" id="modalTitle"></div>
-            <div class="modal-message" id="modalMessage"></div>
-            <button class="modal-close" onclick="closeModal()">Cerrar</button>
+            <div class="modal-title" id="modalTitle">Título</div>
+            <div class="modal-message" id="modalMessage">Mensaje</div>
+            <button class="modal-button" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación de Reseteo -->
+    <div class="modal" id="resetModal">
+        <div class="modal-content">
+            <div class="modal-title">¿Estás Seguro?</div>
+            <div class="modal-message">Se eliminarán TODOS tus datos, logros, tareas y compras. Esta acción no se puede deshacer.</div>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <button class="modal-button" onclick="confirmReset()" style="background: #E85D75;">Sí, Restablecer</button>
+                <button class="modal-button" onclick="cancelReset()" style="background: var(--text-muted);">No, Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ruleta de Premios -->
+    <div class="wheel-overlay" id="wheelOverlay">
+        <div class="wheel-container">
+            <div class="wheel-title" id="wheelTitle">¡RULETA!</div>
+            <canvas id="wheelCanvas" class="wheel-canvas" width="300" height="300"></canvas>
+            <button class="spin-button" id="spinButton" onclick="spinWheel()">GIRAR RULETA</button>
+            <div class="wheel-prize" id="wheelPrize"></div>
+            <button class="close-wheel" onclick="closeWheel()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Imagen de Tienda -->
+    <div class="image-modal" id="imageModal">
+        <div class="image-modal-content">
+            <div class="image-modal-title" id="imageModalTitle">Visualizar Producto</div>
+            <img id="imageModalImg" class="image-modal-image" src="" alt="Producto">
+            <button class="image-modal-close" onclick="closeImageModal()">Cerrar</button>
         </div>
     </div>
 
     <script>
         const COINS_PER_ACHIEVEMENT = 10;
-        const BADGE_URLS = {
-            badge1: "./assets/badge1.png",
-            badge2: "./assets/badge2.png",
-            badge3: "./assets/badge3.png",
-            badge4: "./assets/badge4.png",
-            badge5: "./assets/badge5.png",
-            badge6: "./assets/badge6.png",
-            badge7: "./assets/badge7.png",
-            badge8: "./assets/badge8.png",
-            badge9: "./assets/badge9.png",
-            badgeSecret1: "./assets/badge-secret-1.png",
-            badgeSecret2: "./assets/badge-secret-2.png",
-            badgeSecret3: "./assets/badge-secret-3.png"
-        };
-        const defaultAchievements = [
-            { title: "Primer Paso", description: "Completa tu primer objetivo", percentage: 87, icon: "✦", badgeUrl: BADGE_URLS.badge1, hidden: false },
-            { title: "Mitad del Camino", description: "Alcanza 6 logros completados", percentage: 45, icon: "✦", badgeUrl: BADGE_URLS.badge2, hidden: false },
-            { title: "Constancia", description: "Completa 9 de los objetivos", percentage: 23, icon: "✦", badgeUrl: BADGE_URLS.badge3, hidden: false },
-            { title: "Dominio Absoluto", description: "Completa la totalidad de los 12 objetivos", percentage: 8, icon: "✦", badgeUrl: BADGE_URLS.badge4, hidden: false },
-            { title: "Coleccionista", description: "Obtén 5 registros diferentes", percentage: 52, icon: "✦", badgeUrl: BADGE_URLS.badge5, hidden: false },
-            { title: "Perseverancia", description: "Mantén el ritmo constante", percentage: 31, icon: "✦", badgeUrl: BADGE_URLS.badge6, hidden: false },
-            { title: "Ambición", description: "Alcanza 60 puntos totales", percentage: 42, icon: "✦", badgeUrl: BADGE_URLS.badge7, hidden: false },
-            { title: "Estándar Alto", description: "Completa los desafíos difíciles", percentage: 5, icon: "✦", badgeUrl: BADGE_URLS.badge8, hidden: false },
-            { title: "Explorador", description: "Descubre todos los elementos", percentage: 15, icon: "✦", badgeUrl: BADGE_URLS.badge9, hidden: false },
-            { title: "Registro Oculto I", description: "Elemento revelado", percentage: 12, icon: "❖", badgeUrl: BADGE_URLS.badgeSecret1, hidden: true },
-            { title: "Registro Oculto II", description: "Un hito no listado", percentage: 8, icon: "❖", badgeUrl: BADGE_URLS.badgeSecret2, hidden: true },
-            { title: "Hito Excepcional", description: "Todos los secretos", percentage: 1, icon: "❖", badgeUrl: BADGE_URLS.badgeSecret3, hidden: true }
-        ];
-        const defaultTasks = [
-            { title: "Tarea 1", description: "Primera tarea básica", difficulty: "easy", reward: 10 },
-            { title: "Tarea 2", description: "Segunda tarea básica", difficulty: "easy", reward: 10 },
-            { title: "Tarea 3", description: "Tercera tarea básica", difficulty: "easy", reward: 10 },
-            { title: "Tarea 4", description: "Cuarta tarea básica", difficulty: "easy", reward: 10 },
-            { title: "Tarea 5", description: "Quinta tarea básica", difficulty: "easy", reward: 10 },
-            { title: "Tarea 6", description: "Tarea intermedia 1", difficulty: "medium", reward: 20 },
-            { title: "Tarea 7", description: "Tarea intermedia 2", difficulty: "medium", reward: 20 },
-            { title: "Tarea 8", description: "Tarea intermedia 3", difficulty: "medium", reward: 20 },
-            { title: "Tarea 9", description: "Tarea intermedia 4", difficulty: "medium", reward: 20 },
-            { title: "Tarea 10", description: "Tarea intermedia 5", difficulty: "medium", reward: 20 },
-            { title: "Tarea 11", description: "Tarea desafiante 1", difficulty: "hard", reward: 30 },
-            { title: "Tarea 12", description: "Tarea desafiante 2", difficulty: "hard", reward: 30 },
-            { title: "Tarea 13", description: "Tarea desafiante 3", difficulty: "hard", reward: 30 },
-            { title: "Tarea 14", description: "Tarea desafiante 4", difficulty: "hard", reward: 30 },
-            { title: "Tarea 15", description: "Tarea desafiante 5", difficulty: "hard", reward: 30 },
-            { title: "Tarea 16", description: "Tarea básica extra 1", difficulty: "easy", reward: 10 },
-            { title: "Tarea 17", description: "Tarea básica extra 2", difficulty: "easy", reward: 10 },
-            { title: "Tarea 18", description: "Tarea básica extra 3", difficulty: "easy", reward: 10 },
-            { title: "Tarea 19", description: "Tarea básica extra 4", difficulty: "easy", reward: 10 },
-            { title: "Tarea 20", description: "Tarea básica extra 5", difficulty: "easy", reward: 10 },
-            { title: "Tarea 21", description: "Tarea intermedia extra 1", difficulty: "medium", reward: 20 },
-            { title: "Tarea 22", description: "Tarea intermedia extra 2", difficulty: "medium", reward: 20 },
-            { title: "Tarea 23", description: "Tarea intermedia extra 3", difficulty: "medium", reward: 20 },
-            { title: "Tarea 24", description: "Tarea intermedia extra 4", difficulty: "medium", reward: 20 },
-            { title: "Tarea 25", description: "Tarea intermedia extra 5", difficulty: "medium", reward: 20 },
-            { title: "Tarea 26", description: "Tarea desafiante extra 1", difficulty: "hard", reward: 30 },
-            { title: "Tarea 27", description: "Tarea desafiante extra 2", difficulty: "hard", reward: 30 },
-            { title: "Tarea 28", description: "Tarea desafiante extra 3", difficulty: "hard", reward: 30 },
-            { title: "Tarea 29", description: "Tarea desafiante extra 4", difficulty: "hard", reward: 30 },
-            { title: "Tarea 30", description: "Tarea desafiante extra 5", difficulty: "hard", reward: 30 }
-        ];
-        const defaultShopItems = [
-            { name: "Objeto 1", description: "Primer objeto de la tienda", price: 50, image: "./assets/shop/item1.png" },
-            { name: "Objeto 2", description: "Segundo objeto de la tienda", price: 75, image: "./assets/shop/item2.png" },
-            { name: "Objeto 3", description: "Tercer objeto de la tienda", price: 100, image: "./assets/shop/item3.png" },
-            { name: "Objeto 4", description: "Cuarto objeto de la tienda", price: 120, image: "./assets/shop/item4.png" },
-            { name: "Objeto 5", description: "Quinto objeto de la tienda", price: 150, image: "./assets/shop/item5.png" },
-            { name: "Objeto 6", description: "Sexto objeto de la tienda", price: 200, image: "./assets/shop/item6.png" }
-        ];
-        let achievements = initializeData('achievements_complete_v1', defaultAchievements.map(a => ({ ...a, unlocked: false, image: null })));
-        let tasks = initializeData('tasks_v1', defaultTasks.map(t => ({ ...t, completed: false })));
-        let shopItems = initializeData('shop_v1', defaultShopItems.map(s => ({ ...s, purchased: false })));
 
-        function initializeData(key, defaultData) {
-            const saved = localStorage.getItem(key);
-            return saved ? JSON.parse(saved) : defaultData;
+        let achievements = [];
+        let tasks = [];
+        let shopItems = [];
+        let spentCoins = 0;
+
+        // Datos iniciales
+        const defaultAchievements = [
+            { title: 'No necesito caminar.', description: 'Subete a la micro G22 y comienza el recorrido.', unlocked: false, image: null, badgeUrl: null, hidden: false },
+            { title: '¿Viste eso?', description: 'Observa una situación totalmente fuera de lugar, incómoda, rara o fuera de lo común en la calle.', unlocked: false, image: null, badgeUrl: null, hidden: false },
+            { title: 'No, no hoy día.', description: 'Mientras vas en bicicleta, experimenta algo inusual por tus propias acciones imprudentes.', unlocked: false, image: null, badgeUrl: null, hidden: false },
+            { title: 'Ese es el ritmo.', description: 'Muestra tus pasos en un momento fuera de lo común.', unlocked: false, image: null, badgeUrl: null, hidden: false },
+            { title: 'Nuestro Mundo', description: 'Dense un abrazo y sientan el peso de sus mundos.', unlocked: false, image: null, badgeUrl: null, hidden: false },
+            { title: 'Dame un poco más.', description: 'Dense 10 besos antes que termine el día.', unlocked: false, image: null, badgeUrl: null, hidden: false },
+            { title: 'Hoy es el día indicado.', description: 'Vístanse goals y combinen para el gran día.', unlocked: false, image: null, badgeUrl: null, hidden: true },
+            { title: 'Dame más y mucho más', description: 'Dense 20 besos antes que termine el día.', unlocked: false, image: null, badgeUrl: null, hidden: false },
+            { title: 'Necesitaba esto', description: 'Tómate un buen Bubble Tea de cualquier sabor y disfrútalo como nunca.', unlocked: false, image: null, badgeUrl: null, hidden: false },
+            { title: 'No soy de este Banco.', description: 'Usa las bicicletas ITAU.', unlocked: false, image: null, badgeUrl: null, hidden: true },
+            { title: '¿Ya llegamos?', description: 'Llega al destino indicado y planeado.', unlocked: false, image: null, badgeUrl: null, hidden: false },
+            { title: 'This shet is fakin gud.', description: '¡Visita Johnny Rockets y saborea una deliciosa comida!', unlocked: false, image: null, badgeUrl: null, hidden: true },
+        ];
+
+        const defaultTasks = [
+            { title: 'El Inicio', description: 'LLega al Intermodal', completed: false, reward: 15 },
+            { title: 'El día empieza aquí.', description: 'Llega a la estación Manuel Montt.', completed: false, reward: 10 },
+            { title: 'Cupón', description: 'Ocupa las bicicletas ITAU gracias al Cupón.', completed: false, reward: 20 },
+            { title: '¿Tu y yo?', description: 'Encuentra a una pareja de dos abuelos caminando juntos.', completed: false, reward: 12 },
+            { title: '¡ENTREMOS!', description: 'Entra a la tienda "Miniso"', completed: false, reward: 18 },
+            { title: 'Rellenito', description: 'Encuentra un gato', completed: false, reward: 15 },
+            { title: '"Eres para mí"', description: 'Piensen en algo en conjunto', completed: false, reward: 16 },
+            { title: 'OH SI NENA', description: 'Tómense una foto.', completed: false, reward: 10 },
+            { title: 'Voy a reventar', description: 'Come tanto que ya no te cabe nada.', completed: false, reward: 14 },
+            { title: 'Envidia Innecesaria', description: 'Ve a alguien en Bicicleta', completed: false, reward: 13 },
+            { title: '¿Donde las compran?', description: 'Come o consigue unas mentitas.', completed: false, reward: 11 },
+            { title: 'PIP PIP', description: 'Toca la campanita en una bicicleta.', completed: false, reward: 12 },
+            { title: '¡ESO NO SE DICE!', description: 'Insulta a alguien sin que sepa', completed: false, reward: 17 },
+            { title: 'Pies de Hierro', description: 'Camina al menos 5 km', completed: false, reward: 14 },
+            { title: 'Igual Si..', description: 'Piensa en una idea Rica o divertida', completed: false, reward: 13 },
+            { title: 'Te escucho', description: 'Hablen todo el recorrido', completed: false, reward: 15 },
+            { title: '¡ESTO ES VIDA!', description: 'Disfruta el momento y lo que estas haciendo', completed: false, reward: 12 },
+            { title: 'TIA BETTY', description: 'Toma o come algo dulce', completed: false, reward: 25 },
+            { title: 'Gusto Adquerido', description: 'Utiliza la pimineta para disfrutar la comida..', completed: false, reward: 16 },
+            { title: 'CAREROS', description: 'Duda en dar propina', completed: false, reward: 14 },
+            { title: 'Entramos..', description: 'Entra a Happyland o Chuck E. Cheese S y disfruta.', completed: false, reward: 11 },
+            { title: 'DAMELOS', description: 'Gana tickets en Happyland o Chuck E. Cheese S', completed: false, reward: 12 },
+            { title: 'No me arrepiento', description: 'Carga la tarjeta de Happyland o Chuck E. Cheese S.', completed: false, reward: 15 },
+            { title: 'Duo papu', description: 'Trabajen en equipo en algún juego.', completed: false, reward: 13 },
+            { title: 'Algo es algo..', description: 'Gasta los tickets ganados en un premio.', completed: false, reward: 14 },
+            { title: 'Veo todo en ti', description: 'Mirense a los ojos con amors', completed: false, reward: 13 },
+            { title: 'OU OU OU', description: 'Escucha un tema de fondo y muevete al ritmo', completed: false, reward: 11 },
+            { title: 'Si a todo', description: 'Gasta +20.000 CLP', completed: false, reward: 10 },
+            { title: 'No soy Batman..', description: 'No vuelvas a casa si no es de noche ', completed: false, reward: 18 },
+            { title: 'Estomago sin fondo', description: 'Después de comer constantemente, admite que sigues con hambre.', completed: false, reward: 30 },
+        ];
+
+        const defaultShop = [
+            { name: 'Lalaloopsy Cocinera', description: 'Muñeca Lalaloopsy Crumbs Sugar Cookie.', price: 50, purchased: false, image: null },
+            { name: 'Littlest Pet Shop', description: '¡Descubre tu nueva mascota!', price: 75, purchased: false, image: null },
+            { name: 'Laptop Omen', description: 'El HP Omen 15 es una línea de laptops gamer de alto rendimiento.', price: 100, purchased: false, image: null },
+            { name: 'Cafe con leche', description: 'Perfecto para el frio, pero malo para estar despierto..Zzz', price: 80, purchased: false, image: null },
+            { name: 'Chocolate Milka', description: 'Barra de leche', price: 60, purchased: false, image: null },
+            { name: 'Lana', description: 'Lana para tejer cualquier cosa que salga de tu mente', price: 45, purchased: false, image: null },
+            { name: 'Lego Batman', description: 'Minifigura LEGO Batman', price: 70, purchased: false, image: null },
+            { name: 'Nintendo Switch', description: 'Descubre Nintendo Switch y sus juegos más populares.', price: 120, purchased: false, image: null },
+        ];
+
+        // Inicializar datos
+        function loadData() {
+            achievements = JSON.parse(localStorage.getItem('achievements_complete_v1')) || defaultAchievements;
+            tasks = JSON.parse(localStorage.getItem('tasks_v1')) || defaultTasks;
+            shopItems = JSON.parse(localStorage.getItem('shop_v1')) || defaultShop;
+            spentCoins = JSON.parse(localStorage.getItem('spent_coins_v1')) || 0;
         }
 
-        function saveData(key, data) {
-            localStorage.setItem(key, JSON.stringify(data));
+        function saveData(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
         }
 
         function updateAllDisplay() {
             updateAchievements();
             updateTasks();
             updateShop();
-            updateCoinsCounter();
+            updateCoinsDisplay();
+            checkCompletions();
         }
 
-        function updateCoinsCounter() {
-            const achievementCoins = achievements.filter(a => a.unlocked).length * COINS_PER_ACHIEVEMENT;
-            const tasksCoins = tasks.filter(t => t.completed).reduce((sum, t) => sum + t.reward, 0);
-            const totalCoins = achievementCoins + tasksCoins;
-            document.getElementById('totalCoins').textContent = totalCoins;
+        function updateCoinsDisplay() {
+            const totalCoins = getTotalCoins();
+            document.getElementById('coinsDisplay').textContent = totalCoins;
         }
 
         function updateAchievements() {
             const grid = document.getElementById('achievementsGrid');
             grid.innerHTML = '';
 
-            achievements.forEach((ach, index) => {
-                const isHiddenAndLocked = ach.hidden && !ach.unlocked;
+            achievements.forEach((achievement, index) => {
                 const card = document.createElement('div');
-                card.className = `achievement-card ${ach.unlocked ? 'unlocked' : 'locked'} ${isHiddenAndLocked ? 'hidden-achievement' : ''}`;
+                card.className = `achievement-card ${achievement.unlocked ? 'unlocked' : 'locked'} ${achievement.hidden && !achievement.unlocked ? 'hidden-achievement' : ''}`;
 
-                if (isHiddenAndLocked) {
-                    card.innerHTML = `
-                        <div class="image-container no-image" style="background:#FAF8F9;">
-                            <span>OCULTO</span>
-                            <input type="file" class="image-input-wrapper" accept="image/*" onchange="handleImageUpload(event, ${index})">
-                        </div>
-                        <div class="card-content">
-                            <img src="${ach.badgeUrl}" class="badge-img" alt="Insignia oculta">
-                            <div class="card-text">
-                                <div class="achievement-title">Logro no revelado</div>
-                                <div class="achievement-desc">Continúa para descubrir</div>
-                                <div class="achievement-stats">
-                                    <div>
-                                        <input type="checkbox" class="checkbox" onchange="toggleAchievement(${index}, this)">
-                                        <span>+${COINS_PER_ACHIEVEMENT}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    const imageContainer = ach.image 
-                        ? `<div class="image-container"><img src="${ach.image}" alt="${ach.title}"><input type="file" class="image-input-wrapper" accept="image/*" onchange="handleImageUpload(event, ${index})"></div>`
-                        : `<div class="image-container no-image"><span>Adjuntar imagen</span><input type="file" class="image-input-wrapper" accept="image/*" onchange="handleImageUpload(event, ${index})"></div>`;
+                const imageSrc = achievement.image || null;
+                const imageHTML = imageSrc 
+                    ? `<img src="${imageSrc}" alt="Achievement">`
+                    : `<span style="color: #968389; font-size: 2.5rem;">◼️</span>`;
 
-                    card.innerHTML = `
-                        ${imageContainer}
-                        ${!ach.unlocked ? '<div class="locked-overlay">Pendiente</div>' : ''}
-                        
-                        <div class="card-content">
-                            <img src="${ach.badgeUrl}" class="badge-img" alt="Insignia">
-                            <div class="card-text">
-                                <div class="achievement-title editable" ondblclick="editAchievementTitle(${index}, this)">${ach.title}</div>
-                                <div class="achievement-desc editable" ondblclick="editAchievementDesc(${index}, this)">${ach.description}</div>
-                                <div class="achievement-stats">
-                                    <span>${ach.percentage}%</span>
-                                    <label>
-                                        <input type="checkbox" class="checkbox" ${ach.unlocked ? 'checked' : ''} onchange="toggleAchievement(${index}, this)">
-                                        +${COINS_PER_ACHIEVEMENT}
-                                    </label>
-                                </div>
-                            </div>
+                const badgeSrc = achievement.badgeUrl || null;
+                const badgeHTML = badgeSrc
+                    ? `<img src="${badgeSrc}" alt="Badge">`
+                    : `<span style="font-size: 1.8rem;">⭐</span>`;
+
+                card.innerHTML = `
+                    <div class="image-container ${!imageSrc ? 'no-image' : ''}">
+                        ${imageHTML}
+                        <input type="file" class="image-input-wrapper" accept="image/*" onchange="handleImageUpload(event, ${index})">
+                    </div>
+                    <div class="achievement-content">
+                        <div class="badge-container">
+                            ${badgeHTML}
+                            <input type="file" class="badge-input" accept="image/*" onchange="handleBadgeUpload(event, ${index})">
                         </div>
-                    `;
-                }
+                        <div class="achievement-text">
+                            <div class="achievement-title">${achievement.title}</div>
+                            <div class="achievement-description">${achievement.description}</div>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-top: 10px;">
+                                <input type="checkbox" class="achievement-checkbox" ${achievement.unlocked ? 'checked' : ''} onchange="toggleAchievement(${index}, this)">
+                                <span style="font-size: 0.9rem; color: var(--text-muted);">Completado</span>
+                            </label>
+                            <div class="achievement-reward">🟡 +${COINS_PER_ACHIEVEMENT}</div>
+                        </div>
+                    </div>
+                `;
                 grid.appendChild(card);
             });
         }
@@ -628,19 +1186,16 @@
 
                 card.innerHTML = `
                     <div class="task-header">
+                        <div class="task-title">${task.title}</div>
                         <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index}, this)">
-                        <div class="task-title editable" ondblclick="editTaskTitle(${index}, this)">${task.title}</div>
                     </div>
-                    <div class="task-description editable" ondblclick="editTaskDesc(${index}, this)">${task.description}</div>
-                    <div class="task-difficulty difficulty-${task.difficulty}">${task.difficulty.toUpperCase()}</div>
-                    <div class="task-reward">💰 +${task.reward}</div>
+                    <div class="task-description">${task.description}</div>
+                    <div class="task-footer">
+                        <div class="task-reward">🟡 +${task.reward}</div>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
-
-            document.getElementById('tasksCompleted').textContent = tasks.filter(t => t.completed).length;
-            document.getElementById('totalTasks').textContent = tasks.length;
-            document.getElementById('tasksCoins').textContent = tasks.filter(t => t.completed).reduce((sum, t) => sum + t.reward, 0);
         }
 
         function updateShop() {
@@ -653,17 +1208,21 @@
                 const card = document.createElement('div');
                 card.className = `shop-item ${item.purchased ? 'purchased' : ''}`;
 
-                const imageContainer = item.image 
-                    ? `<div class="shop-item-image"><img src="${item.image}" alt="${item.name}"></div>`
-                    : `<div class="shop-item-image" style="color: #968389; font-size: 3rem;">📦</div>`;
+                const imageSrc = item.image || null;
+                const imageHTML = imageSrc 
+                    ? `<img src="${imageSrc}" alt="${item.name}">`
+                    : `<span style="color: #968389; font-size: 3rem;">📦</span>`;
 
                 card.innerHTML = `
                     ${item.purchased ? '<div class="purchased-badge">✓ Comprado</div>' : ''}
-                    ${imageContainer}
-                    <div class="shop-item-name editable" ondblclick="editShopName(${index}, this)">${item.name}</div>
-                    <div class="shop-item-description editable" ondblclick="editShopDesc(${index}, this)">${item.description}</div>
+                    <div class="shop-item-image ${!imageSrc ? '' : ''}">
+                        ${imageHTML}
+                        <input type="file" class="shop-image-input" accept="image/*" onchange="handleShopImageUpload(event, ${index})">
+                    </div>
+                    <div class="shop-item-name" onclick="showShopImage(${index}, '${item.name}', '${imageSrc ? imageSrc.replace(/'/g, "\\'") : ''}')" style="cursor: pointer;">${item.name}</div>
+                    <div class="shop-item-description">${item.description}</div>
                     <div class="shop-item-price">
-                        <span>💰 ${item.price}</span>
+                        <span>🟡 ${item.price}</span>
                     </div>
                     <button class="buy-button" onclick="buyItem(${index})" ${item.purchased || totalCoins < item.price ? 'disabled' : ''}>
                         ${item.purchased ? 'Comprado' : 'Comprar'}
@@ -676,12 +1235,12 @@
         function getTotalCoins() {
             const achievementCoins = achievements.filter(a => a.unlocked).length * COINS_PER_ACHIEVEMENT;
             const tasksCoins = tasks.filter(t => t.completed).reduce((sum, t) => sum + t.reward, 0);
-            return achievementCoins + tasksCoins;
+            return achievementCoins + tasksCoins - spentCoins;
         }
 
         function toggleAchievement(index, checkbox) {
             achievements[index].unlocked = checkbox.checked;
-            if (checkbox.checked) animateCoins(checkbox, 10);
+            if (checkbox.checked) animateCoins(checkbox, COINS_PER_ACHIEVEMENT);
             saveData('achievements_complete_v1', achievements);
             updateAllDisplay();
         }
@@ -696,9 +1255,11 @@
         function buyItem(index) {
             const totalCoins = getTotalCoins();
             if (totalCoins >= shopItems[index].price && !shopItems[index].purchased) {
+                spentCoins += shopItems[index].price;
                 shopItems[index].purchased = true;
                 saveData('shop_v1', shopItems);
-                showModal('🎉 Compra Exitosa', `¡Obtuviste "${shopItems[index].name}"! 🎁`);
+                saveData('spent_coins_v1', spentCoins);
+                showModal('Compra Exitosa', `¡Obtuviste "${shopItems[index].name}"! ¡¡WAOUSSS!!`);
                 updateAllDisplay();
             }
         }
@@ -722,6 +1283,32 @@
                     achievements[index].image = e.target.result;
                     saveData('achievements_complete_v1', achievements);
                     updateAchievements();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleBadgeUpload(event, index) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    achievements[index].badgeUrl = e.target.result;
+                    saveData('achievements_complete_v1', achievements);
+                    updateAchievements();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleShopImageUpload(event, index) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    shopItems[index].image = e.target.result;
+                    saveData('shop_v1', shopItems);
+                    updateShop();
                 };
                 reader.readAsDataURL(file);
             }
@@ -841,7 +1428,200 @@
             document.getElementById('modal').classList.remove('active');
         }
 
+        // ===== FUNCIONES DE RULETA =====
+        let wheelSpinning = false;
+        const wheelPrizes = [
+            { emoji: '🟣', text: 'RECUERDO CHISTOSO', bonus: 50 },
+            { emoji: '🟤', text: 'HISTORIA TRAUMATICA', bonus: 0 },
+            { emoji: '🔴', text: 'HISTORIA DE PASCUA', bonus: 100 },
+            { emoji: '🔵', text: 'HISTORIA INCOMODA', bonus: 0 },
+            { emoji: '🟠', text: 'RECUERDO DE NAVIDAD', bonus: 75 },
+            { emoji: '🟢', text: 'RECUERDO EXTRAÑO', bonus: 25 },
+        ];
+
+        function drawWheel() {
+            const canvas = document.getElementById('wheelCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const radius = canvas.width / 2;
+            const sliceAngle = (Math.PI * 2) / wheelPrizes.length;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            wheelPrizes.forEach((prize, index) => {
+                const startAngle = sliceAngle * index;
+                const endAngle = sliceAngle * (index + 1);
+
+                // Colores alternados
+                const colors = ['#FFB6D9', '#A8546C', '#FFD6E8', '#C98CA0', '#FFF0F5', '#E8B5CF'];
+                ctx.fillStyle = colors[index % colors.length];
+                ctx.beginPath();
+                ctx.arc(radius, radius, radius, startAngle, endAngle);
+                ctx.lineTo(radius, radius);
+                ctx.fill();
+
+                // Borde
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(radius, radius, radius, startAngle, endAngle);
+                ctx.lineTo(radius, radius);
+                ctx.stroke();
+
+                // Texto
+                ctx.save();
+                ctx.translate(radius, radius);
+                ctx.rotate(startAngle + sliceAngle / 2);
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = 'bold 14px Arial';
+                ctx.fillText(prize.emoji, radius - 20, 5);
+                ctx.restore();
+            });
+
+            // Punta de arriba
+            ctx.fillStyle = '#A8546C';
+            ctx.beginPath();
+            ctx.moveTo(radius - 10, 0);
+            ctx.lineTo(radius + 10, 0);
+            ctx.lineTo(radius, 15);
+            ctx.fill();
+        }
+
+        function spinWheel() {
+            if (wheelSpinning) return;
+            wheelSpinning = true;
+
+            const canvas = document.getElementById('wheelCanvas');
+            let rotation = 0;
+            const spinButton = document.getElementById('spinButton');
+            spinButton.disabled = true;
+
+            const spinDuration = 4000;
+            const startTime = Date.now();
+            const randomPrizeIndex = Math.floor(Math.random() * wheelPrizes.length);
+            const finalRotation = (360 * 5) + (360 - (randomPrizeIndex * (360 / wheelPrizes.length))) % 360;
+
+            function animate() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / spinDuration, 1);
+                
+                // Easing: ease-out
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                rotation = finalRotation * easeProgress;
+
+                canvas.style.transform = `rotate(${rotation}deg)`;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    wheelSpinning = false;
+                    spinButton.disabled = false;
+                    showPrizeResult(randomPrizeIndex);
+                }
+            }
+
+            animate();
+        }
+
+        function showPrizeResult(prizeIndex) {
+            const prize = wheelPrizes[prizeIndex];
+            const prizeDisplay = document.getElementById('wheelPrize');
+            prizeDisplay.textContent = `${prize.emoji} ¡Ganaste! ${prize.text}`;
+            
+            // Si hay bonus de monedas, agregarlo
+            if (prize.bonus > 0) {
+                spentCoins = Math.max(0, spentCoins - prize.bonus);
+                saveData('spent_coins_v1', spentCoins);
+                updateCoinsDisplay();
+            }
+        }
+
+        function closeWheel() {
+            document.getElementById('wheelOverlay').classList.remove('active');
+            document.getElementById('wheelPrize').textContent = '';
+        }
+
+        function checkCompletions() {
+            // Verificar si todos los logros están completados
+            const allAchievementsUnlocked = achievements.every(a => a.unlocked);
+            if (allAchievementsUnlocked && achievements.length > 0) {
+                const hasShownAchievementWheel = localStorage.getItem('shown_achievement_wheel_v1') === 'true';
+                if (!hasShownAchievementWheel) {
+                    showWheelModal('¡COMPLETASTE TODOS LOS FUKIN LOGROS!');
+                    localStorage.setItem('shown_achievement_wheel_v1', 'true');
+                    return;
+                }
+            }
+
+            // Verificar si todas las tareas están completadas
+            const allTasksCompleted = tasks.every(t => t.completed);
+            if (allTasksCompleted && tasks.length > 0) {
+                const hasShownTasksWheel = localStorage.getItem('shown_tasks_wheel_v1') === 'true';
+                if (!hasShownTasksWheel) {
+                    showWheelModal('¡COMPLETASTE TODAS LAS TAREAS!');
+                    localStorage.setItem('shown_tasks_wheel_v1', 'true');
+                    return;
+                }
+            }
+        }
+
+        function showWheelModal(title) {
+            document.getElementById('wheelTitle').textContent = title;
+            document.getElementById('wheelOverlay').classList.add('active');
+            drawWheel();
+            document.getElementById('spinButton').disabled = false;
+            document.getElementById('wheelPrize').textContent = '';
+        }
+
+        // ===== FUNCIONES DE VISUALIZACIÓN DE IMAGEN DE TIENDA =====
+        function showShopImage(index, name, imageSrc) {
+            if (!imageSrc) {
+                showModal('Sin Imagen', 'Este producto no tiene imagen cargada aún.');
+                return;
+            }
+            document.getElementById('imageModalTitle').textContent = name;
+            document.getElementById('imageModalImg').src = imageSrc;
+            document.getElementById('imageModal').classList.add('active');
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        // ===== FUNCIONES DE RESETEO =====
+        function showResetConfirmation() {
+            document.getElementById('resetModal').classList.add('active');
+        }
+
+        function cancelReset() {
+            document.getElementById('resetModal').classList.remove('active');
+        }
+
+        function confirmReset() {
+            // Borrar todos los datos de localStorage
+            localStorage.removeItem('achievements_complete_v1');
+            localStorage.removeItem('tasks_v1');
+            localStorage.removeItem('shop_v1');
+            localStorage.removeItem('spent_coins_v1');
+            localStorage.removeItem('shown_achievement_wheel_v1');
+            localStorage.removeItem('shown_tasks_wheel_v1');
+            
+            // Cerrar modal
+            document.getElementById('resetModal').classList.remove('active');
+            
+            // Mostrar mensaje y recargar
+            showModal('Restablecido...', 'Todos los datos han sido eliminados. La página se recargará ahora.');
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        }
+
+        // Inicializar
+        loadData();
         updateAllDisplay();
+        drawWheel();
     </script>
 </body>
 </html>
