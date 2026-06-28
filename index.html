@@ -3,8 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabla de Logros Profesional</title>
+    <title>Sistema Completo de Logros, Tareas y Tienda</title>
     <style>
+        :root {
+            --bg-page: linear-gradient(135deg, #FFF0F5 0%, #FDE4ED 50%, #F5D6E1 100%);
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --primary: #A8546C;
+            --primary-hover: #94445A;
+            --primary-soft: #C98CA0;
+            --text-main: #2D1F24;
+            --text-muted: #847277;
+            --border-color: rgba(168, 84, 108, 0.14);
+            --shadow-sm: 0 4px 15px rgba(168, 84, 108, 0.05);
+            --shadow-md: 0 10px 25px -5px rgba(168, 84, 108, 0.09);
+            --shadow-lg: 0 16px 32px -8px rgba(168, 84, 108, 0.2);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,630 +27,336 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #FAF8F9 0%, #F5F1F3 100%);
-            color: #3D3235;
+            background: var(--bg-page);
+            background-attachment: fixed;
+            color: var(--text-main);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 24px 20px;
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* --- HEADER --- */
-        .header {
-            text-align: center;
-            margin-bottom: 48px;
-            padding: 40px 24px;
-            background: #FFFFFF;
-            border: 1px solid #EAE2E4;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.015);
-            position: relative;
-            overflow: hidden;
+        /* === HEADER GLOBAL === */
+        .global-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 20px 28px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: var(--shadow-sm);
         }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #A8546C, transparent);
-        }
-
-        .header h1 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: #1A1416;
+        .header-title {
+            font-size: 1.6rem;
+            font-weight: 800;
             letter-spacing: -0.5px;
-            margin-bottom: 6px;
+            background: linear-gradient(135deg, #2D1F24 0%, #A8546C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .header p {
-            color: #85757A;
+        .coins-counter {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #FFF0F3, #FFE3EC);
+            padding: 10px 22px;
+            border-radius: 30px;
+            border: 2px solid #D6879E;
+            box-shadow: 0 4px 15px rgba(168, 84, 108, 0.15);
+        }
+
+        .coins-icon {
+            font-size: 1.6rem;
+            animation: coinPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes coinPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.18) rotate(6deg); }
+        }
+
+        .coins-value {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary);
+            min-width: 50px;
+        }
+
+        /* === NAVEGACIÓN (TABS) === */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 35px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(8px);
+            padding: 8px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 4px 20px rgba(0,0,0, 0.02);
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 0.95rem;
         }
 
-        .coins-display {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #F5ECEE;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-top: 20px;
-            border: 1px solid #E8D9DC;
-            color: #6E535B;
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--primary);
         }
 
-        .coins-count {
-            color: #A8546C;
-            font-weight: 700;
-            font-size: 1.2rem;
+        .nav-tab.active {
+            color: #FFFFFF;
+            background: linear-gradient(135deg, var(--primary), #BD6B82);
+            box-shadow: 0 6px 18px rgba(168, 84, 108, 0.28);
+            transform: translateY(-1px);
         }
 
-        .progress-bar {
-            width: 100%;
-            max-width: 360px;
-            height: 8px;
-            background: #F0E6E8;
-            border-radius: 10px;
-            margin: 20px auto 0;
-            overflow: hidden;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        /* === SECCIONES === */
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.35s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #A8546C, #C98CA0);
-            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(168, 84, 108, 0.4);
-        }
-
-        /* --- GRID & CARDS --- */
+        /* === LOGROS === */
         .achievements-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-            gap: 20px;
+            gap: 24px;
             margin-bottom: 40px;
         }
 
         .achievement-card {
-            background: #FFFFFF;
-            border: 1px solid #EAE2E4;
-            border-radius: 14px;
-            padding: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 22px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .achievement-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #A8546C, transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            box-shadow: var(--shadow-md);
         }
 
         .achievement-card:hover {
-            border-color: #D6BDC4;
-            box-shadow: 0 8px 24px rgba(168, 84, 108, 0.12);
-            transform: translateY(-2px);
-        }
-
-        .achievement-card:hover::before {
-            opacity: 1;
+            border-color: var(--primary-soft);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
         }
 
         .achievement-card.unlocked {
-            background: linear-gradient(135deg, #FFFFFF 0%, #FAF8F9 100%);
-            border-color: #A8546C;
-        }
-
-        .achievement-card.unlocked .achievement-icon {
-            color: #A8546C;
+            background: #FFFFFF;
+            border: 1.5px solid var(--primary);
         }
 
         .achievement-card.locked {
-            background: #FCFAFA;
-            opacity: 0.85;
+            background: rgba(255, 255, 255, 0.65);
         }
 
-        .achievement-card.hidden-achievement {
-            background: #F7F4F5;
-            border-style: dashed;
-            border-color: #D8CCD0;
-        }
-
-        /* --- IMAGES --- */
         .image-container {
             width: 100%;
             height: 150px;
-            background: #F7F4F5;
-            border: 1px dashed #D6BDC4;
-            border-radius: 8px;
+            background: #FFF5F7;
+            border: 1.5px dashed #E2B6C3;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
 
-        .achievement-card:hover .image-container {
-            background: #F2ECEE;
-            border-color: #A8546C;
+        /* Corrección para sobreescribir el estilo en línea de tu JS */
+        .hidden-achievement .image-container {
+            background: #FFF0F5 !important;
         }
 
         .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 6px;
+            width: 100%; height: 100%; object-fit: cover; border-radius: 10px;
         }
 
         .image-container.no-image {
-            color: #968389;
-            font-size: 0.8rem;
-            text-align: center;
-            padding: 15px;
-            flex-direction: column;
-            gap: 6px;
+            color: #A38C93; font-size: 0.85rem; font-weight: 500;
         }
 
         .image-input-wrapper {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 10;
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; cursor: pointer; z-index: 10;
         }
 
-        /* --- BADGE CONTAINER --- */
-        .badge-upload-area {
-            position: relative;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: #F5ECEE;
-            border: 2px dashed #D6BDC4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-            flex-shrink: 0;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            overflow: hidden;
-        }
-
-        .achievement-card:hover .badge-upload-area {
-            border-color: #A8546C;
-            background: #F2ECEE;
-        }
-
-        .badge-upload-area img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
+        .badge-img {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
             object-fit: cover;
+            margin-right: 14px;
+            flex-shrink: 0;
+            transition: filter 0.3s ease;
+            background: #F9ECEF;
+            padding: 4px;
+            border: 1px solid #EAE0E3;
         }
 
-        .badge-upload-area.no-badge {
-            font-size: 1.3rem;
-            color: #A8546C;
+        .achievement-card.locked .badge-img {
+            filter: grayscale(1) opacity(0.45);
         }
 
-        .badge-input {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        /* --- CARD CONTENT --- */
-        .card-content-wrapper {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-
-        .card-text-area {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .achievement-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
-        }
-
-        .achievement-icon {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            transition: color 0.3s ease;
-        }
+        .card-content { display: flex; align-items: flex-start; flex: 1; }
+        .card-text { flex: 1; min-width: 0; }
 
         .achievement-title {
-            font-size: 0.98rem;
-            font-weight: 600;
-            color: #1A1416;
-            letter-spacing: -0.2px;
+            font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;
         }
 
         .achievement-desc {
-            font-size: 0.84rem;
-            color: #736368;
-            margin-bottom: 16px;
-            line-height: 1.4;
+            font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.45;
         }
 
-        .editable {
-            cursor: text;
-            border-radius: 4px;
-            transition: background 0.15s ease;
-            padding: 2px 4px;
-        }
-
-        .editable:hover {
-            background: #F5ECEE;
-        }
-
-        /* --- FOOTER CARD --- */
         .achievement-stats {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 12px;
-            border-top: 1px solid #F0E6E8;
-            font-size: 0.8rem;
+            display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid #F5EBEF; font-size: 0.85rem; font-weight: 600; color: var(--primary); margin-top: auto;
         }
 
-        .percentage {
-            color: #968389;
-        }
-
-        .percentage-value {
-            color: #3D3235;
-            font-weight: 600;
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .checkbox {
-            width: 16px;
-            height: 16px;
-            accent-color: #A8546C;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .coins-reward {
-            font-weight: 600;
-            color: #8A6D75;
-            background: #F5ECEE;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            transition: all 0.2s ease;
-        }
-
-        .achievement-card.unlocked .coins-reward {
-            background: linear-gradient(135deg, #E8D9DC, #F0E6E8);
-            color: #A8546C;
-            font-weight: 700;
-        }
+        .checkbox { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
 
         .locked-overlay {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            font-size: 0.8rem;
-            background: #F0E6E8;
-            color: #736368;
-            padding: 2px 8px;
-            border-radius: 12px;
-            pointer-events: none;
-            z-index: 5;
-            font-weight: 500;
+            position: absolute; top: 14px; right: 14px; background: #F4E3E8; color: #9C6C7B; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; z-index: 5;
         }
 
-        .achievement-card.unlocked .locked-overlay {
-            display: none;
-        }
+        .achievement-card.unlocked .locked-overlay { display: none; }
 
-        /* --- INPUTS EN EDICIÓN --- */
-        input[type="text"] {
-            width: 100%;
-            background: #F5ECEE;
-            border: 1px solid #A8546C;
-            color: #1A1416;
-            padding: 4px 6px;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: inherit;
-            font-weight: inherit;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            background: #FFFFFF;
-            box-shadow: 0 0 8px rgba(168, 84, 108, 0.3);
-        }
-
-        /* --- BOTONES --- */
-        .button-group {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-top: 32px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.88rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            border: none;
-        }
-
-        .export-btn {
-            background: #1A1416;
+        /* === TAREAS === */
+        .tasks-banner {
+            background: linear-gradient(135deg, #A8546C 0%, #BA6A81 50%, #CD8398 100%);
             color: #FFFFFF;
-            border: 1px solid #1A1416;
-        }
-
-        .export-btn:hover {
-            background: #33282C;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        .reset-btn {
-            background: #FFFFFF;
-            color: #736368;
-            border: 1px solid #D6BDC4;
-        }
-
-        .reset-btn:hover {
-            background: #F7F4F5;
-            color: #1A1416;
-            border-color: #A8546C;
-        }
-
-        .stats-footer {
-            text-align: center;
-            margin-top: 48px;
-            color: #968389;
-            font-size: 0.8rem;
-        }
-
-        /* === MODAL DE FELICITACIONES === */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background: #FFFFFF;
-            border-radius: 20px;
-            padding: 48px 32px;
-            text-align: center;
-            max-width: 600px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: modalBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 2px solid #A8546C;
-        }
-
-        @keyframes modalBounce {
-            0% { transform: scale(0.3) translateY(30px); opacity: 0; }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .modal-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #A8546C;
-            margin-bottom: 16px;
-            letter-spacing: -0.5px;
-            animation: titlePulse 1.2s ease-in-out;
-        }
-
-        @keyframes titlePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .modal-subtitle {
-            font-size: 1.1rem;
-            color: #736368;
-            margin-bottom: 32px;
-            line-height: 1.6;
-        }
-
-        /* === RULETA === */
-        .wheel-container {
-            margin: 40px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .wheel {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: conic-gradient(
-                from 0deg,
-                #FFE5E5 0deg 60deg,
-                #F5ECEE 60deg 120deg,
-                #E8D9DC 120deg 180deg,
-                #D8CCD0 180deg 240deg,
-                #C98CA0 240deg 300deg,
-                #A8546C 300deg 360deg
-            );
-            border: 8px solid #1A1416;
-            box-shadow: 0 8px 32px rgba(168, 84, 108, 0.3), inset 0 0 20px rgba(0,0,0,0.1);
+            padding: 32px 28px;
+            border-radius: 22px;
+            margin-bottom: 35px;
+            box-shadow: 0 12px 30px rgba(168, 84, 108, 0.28);
             position: relative;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .wheel:hover {
-            transform: scale(1.05);
-        }
-
-        .wheel.spinning {
-            animation: spin 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(1080deg); }
-        }
-
-        .wheel-center {
-            width: 60px;
-            height: 60px;
-            background: #1A1416;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            z-index: 10;
-        }
-
-        .wheel-pointer {
-            position: absolute;
-            top: -15px;
-            width: 0;
-            height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-top: 20px solid #A8546C;
-            z-index: 11;
-        }
-
-        .spin-button {
-            background: linear-gradient(135deg, #A8546C, #C98CA0);
-            color: #FFFFFF;
+            overflow: hidden;
             border: none;
-            padding: 14px 32px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 16px rgba(168, 84, 108, 0.3);
         }
 
-        .spin-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(168, 84, 108, 0.4);
+        .tasks-banner::after {
+            content: ''; position: absolute; top: -50%; right: -10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; pointer-events: none;
         }
 
-        .spin-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .banner-title { font-size: 1.9rem; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
+        .banner-subtitle { font-size: 0.95rem; opacity: 0.9; margin-bottom: 22px; }
+
+        .banner-stats {
+            display: flex; gap: 28px; flex-wrap: wrap; background: rgba(0,0,0,0.12); padding: 14px 20px; border-radius: 14px; backdrop-filter: blur(4px);
         }
 
-        .prize-result {
-            margin-top: 24px;
-            padding: 16px;
-            background: #F5ECEE;
-            border-radius: 12px;
-            border: 2px solid #A8546C;
-            min-height: 60px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 8px;
+        .stat-item { display: flex; align-items: center; gap: 8px; font-size: 0.92rem; }
+        .stat-value { font-weight: 800; font-size: 1.25rem; color: #FFF; }
+
+        .tasks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+        .task-card {
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; transition: all 0.25s ease; box-shadow: var(--shadow-md); display: flex; flex-direction: column; justify-content: space-between; cursor: pointer;
         }
 
-        .prize-result.show {
-            display: flex;
-            animation: prizeShow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        .task-card:hover {
+            border-color: var(--primary-soft); box-shadow: var(--shadow-lg); transform: translateY(-3px);
         }
 
-        @keyframes prizeShow {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); opacity: 1; }
+        .task-card.completed {
+            background: rgba(255, 255, 255, 0.5); border-color: rgba(168, 84, 108, 0.1); opacity: 0.65;
         }
 
-        .close-modal {
-            margin-top: 20px;
-            background: #1A1416;
-            color: #FFFFFF;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s ease;
+        .task-card.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
+
+        .task-header { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px; }
+        .task-checkbox { width: 20px; height: 20px; border-radius: 6px; accent-color: var(--primary); cursor: pointer; margin-top: 2px; flex-shrink: 0; }
+        .task-title { font-weight: 700; color: var(--text-main); font-size: 1rem; }
+        .task-description { font-size: 0.86rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4; }
+
+        .task-difficulty {
+            display: inline-block; padding: 4px 12px; border-radius: 8px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px; color: #FFFFFF; align-self: flex-start;
         }
 
-        .close-modal:hover {
-            background: #33282C;
+        /* Paleta Pastel Profesional */
+        .difficulty-easy { background: #5EC286; }
+        .difficulty-medium { background: #EBA059; }
+        .difficulty-hard { background: #E66767; }
+
+        .task-reward {
+            display: flex; align-items: center; gap: 6px; font-weight: 800; color: var(--primary); font-size: 0.95rem; margin-top: auto; padding-top: 10px; border-top: 1px dashed #F2E4E8;
         }
 
-        /* --- ANIMACIÓN FLOTANTE --- */
+        /* === TIENDA === */
+        #shop h2 { color: var(--text-main) !important; }
+        
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px; }
+
+        .shop-item {
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; padding: 22px; text-align: center; transition: all 0.3s ease; position: relative; box-shadow: var(--shadow-md); display: flex; flex-direction: column;
+        }
+
+        .shop-item:hover {
+            border-color: var(--primary); box-shadow: var(--shadow-lg); transform: translateY(-5px);
+        }
+
+        .shop-item-image {
+            width: 100%; height: 160px; background: #FFF5F7; border: 1.5px dashed #E2B6C3; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px; overflow: hidden;
+        }
+
+        .shop-item-image img { width: 100%; height: 100%; object-fit: cover; }
+        .shop-item-name { font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+        .shop-item-description { font-size: 0.86rem; color: var(--text-muted); margin-bottom: 18px; flex: 1; display: flex; align-items: center; justify-content: center; }
+        .shop-item-price { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-bottom: 16px; }
+
+        .buy-button {
+            width: 100%; padding: 14px; background: linear-gradient(135deg, var(--primary), #C1738A); color: #FFFFFF; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; font-size: 0.95rem; box-shadow: 0 4px 12px rgba(168, 84, 108, 0.2);
+        }
+
+        .buy-button:hover:not(:disabled) {
+            transform: translateY(-2px); box-shadow: 0 6px 16px rgba(168, 84, 108, 0.35); background: linear-gradient(135deg, var(--primary-hover), #AF5F76);
+        }
+
+        .buy-button:disabled { background: #E5D5DA; color: #9C8B90; box-shadow: none; cursor: not-allowed; }
+        .shop-item.purchased { opacity: 0.7; border-color: #EAE0E3; }
+
+        .purchased-badge {
+            position: absolute; top: 14px; right: 14px; background: var(--text-main); color: #FFFFFF; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.75rem; letter-spacing: 0.5px; z-index: 2;
+        }
+
+        /* === ANIMACIONES === */
+        .coin-animation {
+            position: fixed; font-size: 1.6rem; font-weight: 800; color: #E6A15C; text-shadow: 0 2px 8px rgba(230, 161, 92, 0.4); pointer-events: none; z-index: 1000; animation: coinFloat 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes coinFloat {
+            0% { opacity: 1; transform: translateY(0) scale(0.8); }
+            50% { transform: translateY(-45px) scale(1.1); }
+            100% { opacity: 0; transform: translateY(-70px) scale(0.9); }
+        }
+
         .float-particle {
-            position: fixed;
-            pointer-events: none;
-            z-index: 999;
-            font-size: 1.5rem;
-            animation: floatUp 1.5s ease-out forwards;
+            position: fixed; pointer-events: none; z-index: 999; font-size: 1.5rem; animation: floatUp 1.5s ease-out forwards;
         }
 
         @keyframes floatUp {
@@ -644,167 +364,226 @@
             100% { opacity: 0; transform: translateY(-60px) scale(0.8); }
         }
 
-        @media (max-width: 600px) {
-            .achievements-grid { grid-template-columns: 1fr; }
-            body { padding: 20px 12px; }
-            .modal-content { padding: 32px 20px; }
-            .wheel { width: 200px; height: 200px; }
+        /* === MODAL === */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(45, 31, 36, 0.45); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+
+        .modal-content {
+            background: #FFFFFF; border-radius: 24px; padding: 42px 36px; text-align: center; max-width: 440px; width: 90%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 2px solid var(--primary-soft); animation: modalBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalBounce {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title { font-size: 1.8rem; font-weight: 800; color: var(--primary); margin-bottom: 12px; }
+        .modal-message { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 28px; line-height: 1.5; }
+
+        .modal-close {
+            background: var(--text-main); color: #FFFFFF; border: none; padding: 14px 32px; border-radius: 12px; cursor: pointer; font-weight: 700; transition: all 0.2s ease; width: 100%;
+        }
+
+        .modal-close:hover { background: var(--primary); }
+
+        .editable { cursor: text; border-radius: 6px; padding: 2px 6px; transition: background 0.2s ease; }
+        .editable:hover { background: #FFF0F3; outline: 1px dashed #D6879E; }
+
+        input[type="text"] {
+            width: 100%; background: #FFF0F3; border: 1.5px solid var(--primary); color: var(--text-main); padding: 6px 10px; border-radius: 6px; font-family: inherit; font-size: inherit; font-weight: 600;
+        }
+
+        input[type="text"]:focus {
+            outline: none; background: #FFFFFF; box-shadow: 0 0 0 3px rgba(168, 84, 108, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .achievements-grid, .tasks-grid, .shop-grid { grid-template-columns: 1fr; }
+            .global-header { flex-direction: column; gap: 16px; text-align: center; }
+            .nav-tabs { flex-direction: column; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <h1>✨ Tabla de Logros Profesional</h1>
-            <p>Registro de objetivos y recompensas personales</p>
-            
-            <div class="coins-display">
-                <span>Progreso total:</span>
-                <span class="coins-count" id="coinsCount">0</span>
-                <span>/ 120 pts</span>
+        <div class="global-header">
+            <h1 class="header-title">✨ Sistema Completo</h1>
+            <div class="coins-counter">
+                <span class="coins-icon">💰</span>
+                <span class="coins-value" id="totalCoins">0</span>
             </div>
-
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-            </div>
-        </header>
-
-        <main class="achievements-grid" id="achievementsGrid"></main>
-
-        <div class="button-group">
-            <button class="btn export-btn" onclick="exportProgress()">📥 Exportar estado</button>
-            <button class="btn reset-btn" onclick="resetAllAchievements()">🔄 Restablecer</button>
         </div>
 
-        <footer class="stats-footer">
-            <p>Doble clic en textos para editar • Clic en el recuadro de imagen para examinar</p>
-            <p style="margin-top: 8px; font-size: 0.75rem; color: #968389;">Para cambiar las insignias, edita los URLs en la sección BADGE_URLS del código</p>
-        </footer>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('achievements')">🏆 Logros</button>
+            <button class="nav-tab" onclick="switchTab('tasks')">✅ Tareas</button>
+            <button class="nav-tab" onclick="switchTab('shop')">🛍️ Tienda</button>
+        </div>
+
+        <section class="section active" id="achievements">
+            <div class="achievements-grid" id="achievementsGrid"></div>
+        </section>
+
+        <section class="section" id="tasks">
+            <div class="tasks-banner">
+                <div class="banner-title">📋 Mis Tareas</div>
+                <div class="banner-subtitle">Completa tareas para ganar monedas</div>
+                <div class="banner-stats">
+                    <div class="stat-item">
+                        <span>Completadas:</span>
+                        <span class="stat-value" id="tasksCompleted">0</span>
+                        <span>/ <span id="totalTasks">30</span></span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Monedas ganadas en tareas:</span>
+                        <span class="stat-value" id="tasksCoins">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tasks-grid" id="tasksGrid"></div>
+        </section>
+
+        <section class="section" id="shop">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="font-size: 1.8rem; color: #1A1416; margin-bottom: 8px;">🛍️ Tienda</h2>
+                <p style="color: #736368;">Compra objetos con tus monedas ganadas</p>
+            </div>
+            <div class="shop-grid" id="shopGrid"></div>
+        </section>
     </div>
 
-    <!-- MODAL DE FELICITACIONES -->
-    <div class="modal-overlay" id="congratsModal">
+    <div class="modal-overlay" id="modal">
         <div class="modal-content">
-            <div class="modal-title">🎉 ¡FELICITACIONES! 🎉</div>
-            <div class="modal-subtitle">
-                ¡Has completado TODOS los logros! 
-                <br><strong>Ahora puedes girar la ruleta de premios especiales</strong>
-            </div>
-            
-            <div class="wheel-container">
-                <div class="wheel" id="prizeWheel">
-                    <div class="wheel-pointer"></div>
-                    <div class="wheel-center">🎁</div>
-                </div>
-                
-                <button class="spin-button" id="spinBtn" onclick="spinWheel()">GIRAR RULETA</button>
-                
-                <div class="prize-result" id="prizeResult">
-                    <span id="prizeEmoji" style="font-size: 2rem;"></span>
-                    <strong id="prizeText"></strong>
-                </div>
-            </div>
-
-            <button class="close-modal" onclick="closeCongratsModal()">Cerrar</button>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-message" id="modalMessage"></div>
+            <button class="modal-close" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
 
     <script>
-        const TOTAL_ACHIEVEMENTS = 12;
         const COINS_PER_ACHIEVEMENT = 10;
-        const MAX_COINS = TOTAL_ACHIEVEMENTS * COINS_PER_ACHIEVEMENT;
-
-        // URLs de las insignias - EDITA AQUÍ LAS IMÁGENES
-        // Puedes usar URLs de internet o imágenes locales
         const BADGE_URLS = {
-            badge1: "https://via.placeholder.com/50/A8546C/ffffff?text=⭐",
-            badge2: "https://via.placeholder.com/50/A8546C/ffffff?text=⭐",
-            badge3: "https://via.placeholder.com/50/A8546C/ffffff?text=⭐",
-            badge4: "https://via.placeholder.com/50/A8546C/ffffff?text=⭐",
-            badge5: "https://via.placeholder.com/50/A8546C/ffffff?text=⭐",
-            badge6: "https://via.placeholder.com/50/A8546C/ffffff?text=⭐",
-            badge7: "https://via.placeholder.com/50/A8546C/ffffff?text=⭐",
-            badge8: "https://via.placeholder.com/50/A8546C/ffffff?text=⭐",
-            badge9: "https://via.placeholder.com/50/A8546C/ffffff?text=⭐",
-            badgeSecret1: "https://via.placeholder.com/50/D8CCD0/ffffff?text=❖",
-            badgeSecret2: "https://via.placeholder.com/50/D8CCD0/ffffff?text=❖",
-            badgeSecret3: "https://via.placeholder.com/50/D8CCD0/ffffff?text=❖"
+            badge1: "./assets/badges/badge1.png",
+            badge2: "./assets/badges/badge2.png",
+            badge3: "./assets/badges/badge3.png",
+            badge4: "./assets/badges/badge4.png",
+            badge5: "./assets/badges/badge5.png",
+            badge6: "./assets/badges/badge6.png",
+            badge7: "./assets/badges/badge7.png",
+            badge8: "./assets/badges/badge8.png",
+            badge9: "./assets/badges/badge9.png",
+            badgeSecret1: "./assets/badges/badge-secret-1.png",
+            badgeSecret2: "./assets/badges/badge-secret-2.png",
+            badgeSecret3: "./assets/badges/badge-secret-3.png"
         };
-
         const defaultAchievements = [
-            { title: "Primer Paso", description: "Completa tu primer objetivo y comienza el registro", percentage: 87, icon: "✦", badgeUrl: BADGE_URLS.badge1, hidden: false },
+            { title: "Primer Paso", description: "Completa tu primer objetivo", percentage: 87, icon: "✦", badgeUrl: BADGE_URLS.badge1, hidden: false },
             { title: "Mitad del Camino", description: "Alcanza 6 logros completados", percentage: 45, icon: "✦", badgeUrl: BADGE_URLS.badge2, hidden: false },
-            { title: "Constancia", description: "Completa 9 de los objetivos planteados", percentage: 23, icon: "✦", badgeUrl: BADGE_URLS.badge3, hidden: false },
-            { title: "Dominio Absoluto", description: "Completa la totalidad de los 12 objetivos base", percentage: 8, icon: "✦", badgeUrl: BADGE_URLS.badge4, hidden: false },
+            { title: "Constancia", description: "Completa 9 de los objetivos", percentage: 23, icon: "✦", badgeUrl: BADGE_URLS.badge3, hidden: false },
+            { title: "Dominio Absoluto", description: "Completa la totalidad de los 12 objetivos", percentage: 8, icon: "✦", badgeUrl: BADGE_URLS.badge4, hidden: false },
             { title: "Coleccionista", description: "Obtén 5 registros diferentes", percentage: 52, icon: "✦", badgeUrl: BADGE_URLS.badge5, hidden: false },
-            { title: "Perseverancia", description: "Mantén el ritmo de actividad constante", percentage: 31, icon: "✦", badgeUrl: BADGE_URLS.badge6, hidden: false },
-            { title: "Ambición", description: "Alcanza 60 puntos totales en el sistema", percentage: 42, icon: "✦", badgeUrl: BADGE_URLS.badge7, hidden: false },
-            { title: "Estándar Alto", description: "Completa los desafíos de mayor dificultad", percentage: 5, icon: "✦", badgeUrl: BADGE_URLS.badge8, hidden: false },
-            { title: "Explorador", description: "Descubre todos los elementos ocultos", percentage: 15, icon: "✦", badgeUrl: BADGE_URLS.badge9, hidden: false },
-            { title: "Registro Oculto I", description: "Elemento fuera del plan estándar revelado", percentage: 12, icon: "❖", badgeUrl: BADGE_URLS.badgeSecret1, hidden: true },
-            { title: "Registro Oculto II", description: "Has encontrado un hito no listado", percentage: 8, icon: "❖", badgeUrl: BADGE_URLS.badgeSecret2, hidden: true },
-            { title: "Hito Excepcional", description: "Desbloqueo de la totalidad de registros secretos", percentage: 1, icon: "❖", badgeUrl: BADGE_URLS.badgeSecret3, hidden: true }
+            { title: "Perseverancia", description: "Mantén el ritmo constante", percentage: 31, icon: "✦", badgeUrl: BADGE_URLS.badge6, hidden: false },
+            { title: "Ambición", description: "Alcanza 60 puntos totales", percentage: 42, icon: "✦", badgeUrl: BADGE_URLS.badge7, hidden: false },
+            { title: "Estándar Alto", description: "Completa los desafíos difíciles", percentage: 5, icon: "✦", badgeUrl: BADGE_URLS.badge8, hidden: false },
+            { title: "Explorador", description: "Descubre todos los elementos", percentage: 15, icon: "✦", badgeUrl: BADGE_URLS.badge9, hidden: false },
+            { title: "Registro Oculto I", description: "Elemento revelado", percentage: 12, icon: "❖", badgeUrl: BADGE_URLS.badgeSecret1, hidden: true },
+            { title: "Registro Oculto II", description: "Un hito no listado", percentage: 8, icon: "❖", badgeUrl: BADGE_URLS.badgeSecret2, hidden: true },
+            { title: "Hito Excepcional", description: "Todos los secretos", percentage: 1, icon: "❖", badgeUrl: BADGE_URLS.badgeSecret3, hidden: true }
         ];
-
-        const prizes = [
-            { emoji: "🎖️", text: "Medalla de Honor" },
-            { emoji: "⭐", text: "Bonificación +25 pts" },
-            { emoji: "🏆", text: "Trofeo Especial" },
-            { emoji: "💎", text: "Gema Rara" },
-            { emoji: "🔮", text: "Misterio Revelado" },
-            { emoji: "👑", text: "Título de Maestro" }
+        const defaultTasks = [
+            { title: "Tarea 1", description: "Primera tarea básica", difficulty: "easy", reward: 10 },
+            { title: "Tarea 2", description: "Segunda tarea básica", difficulty: "easy", reward: 10 },
+            { title: "Tarea 3", description: "Tercera tarea básica", difficulty: "easy", reward: 10 },
+            { title: "Tarea 4", description: "Cuarta tarea básica", difficulty: "easy", reward: 10 },
+            { title: "Tarea 5", description: "Quinta tarea básica", difficulty: "easy", reward: 10 },
+            { title: "Tarea 6", description: "Tarea intermedia 1", difficulty: "medium", reward: 20 },
+            { title: "Tarea 7", description: "Tarea intermedia 2", difficulty: "medium", reward: 20 },
+            { title: "Tarea 8", description: "Tarea intermedia 3", difficulty: "medium", reward: 20 },
+            { title: "Tarea 9", description: "Tarea intermedia 4", difficulty: "medium", reward: 20 },
+            { title: "Tarea 10", description: "Tarea intermedia 5", difficulty: "medium", reward: 20 },
+            { title: "Tarea 11", description: "Tarea desafiante 1", difficulty: "hard", reward: 30 },
+            { title: "Tarea 12", description: "Tarea desafiante 2", difficulty: "hard", reward: 30 },
+            { title: "Tarea 13", description: "Tarea desafiante 3", difficulty: "hard", reward: 30 },
+            { title: "Tarea 14", description: "Tarea desafiante 4", difficulty: "hard", reward: 30 },
+            { title: "Tarea 15", description: "Tarea desafiante 5", difficulty: "hard", reward: 30 },
+            { title: "Tarea 16", description: "Tarea básica extra 1", difficulty: "easy", reward: 10 },
+            { title: "Tarea 17", description: "Tarea básica extra 2", difficulty: "easy", reward: 10 },
+            { title: "Tarea 18", description: "Tarea básica extra 3", difficulty: "easy", reward: 10 },
+            { title: "Tarea 19", description: "Tarea básica extra 4", difficulty: "easy", reward: 10 },
+            { title: "Tarea 20", description: "Tarea básica extra 5", difficulty: "easy", reward: 10 },
+            { title: "Tarea 21", description: "Tarea intermedia extra 1", difficulty: "medium", reward: 20 },
+            { title: "Tarea 22", description: "Tarea intermedia extra 2", difficulty: "medium", reward: 20 },
+            { title: "Tarea 23", description: "Tarea intermedia extra 3", difficulty: "medium", reward: 20 },
+            { title: "Tarea 24", description: "Tarea intermedia extra 4", difficulty: "medium", reward: 20 },
+            { title: "Tarea 25", description: "Tarea intermedia extra 5", difficulty: "medium", reward: 20 },
+            { title: "Tarea 26", description: "Tarea desafiante extra 1", difficulty: "hard", reward: 30 },
+            { title: "Tarea 27", description: "Tarea desafiante extra 2", difficulty: "hard", reward: 30 },
+            { title: "Tarea 28", description: "Tarea desafiante extra 3", difficulty: "hard", reward: 30 },
+            { title: "Tarea 29", description: "Tarea desafiante extra 4", difficulty: "hard", reward: 30 },
+            { title: "Tarea 30", description: "Tarea desafiante extra 5", difficulty: "hard", reward: 30 }
         ];
+        const defaultShopItems = [
+            { name: "Objeto 1", description: "Primer objeto de la tienda", price: 50, image: "./assets/shop/item1.png" },
+            { name: "Objeto 2", description: "Segundo objeto de la tienda", price: 75, image: "./assets/shop/item2.png" },
+            { name: "Objeto 3", description: "Tercer objeto de la tienda", price: 100, image: "./assets/shop/item3.png" },
+            { name: "Objeto 4", description: "Cuarto objeto de la tienda", price: 120, image: "./assets/shop/item4.png" },
+            { name: "Objeto 5", description: "Quinto objeto de la tienda", price: 150, image: "./assets/shop/item5.png" },
+            { name: "Objeto 6", description: "Sexto objeto de la tienda", price: 200, image: "./assets/shop/item6.png" }
+        ];
+        let achievements = initializeData('achievements_complete_v1', defaultAchievements.map(a => ({ ...a, unlocked: false, image: null })));
+        let tasks = initializeData('tasks_v1', defaultTasks.map(t => ({ ...t, completed: false })));
+        let shopItems = initializeData('shop_v1', defaultShopItems.map(s => ({ ...s, purchased: false })));
 
-        function initializeAchievements() {
-            const saved = localStorage.getItem('achievements_pro_v2');
-            if (saved) {
-                return JSON.parse(saved);
-            } else {
-                return defaultAchievements.map(ach => ({
-                    ...ach,
-                    unlocked: false,
-                    image: null
-                }));
-            }
+        function initializeData(key, defaultData) {
+            const saved = localStorage.getItem(key);
+            return saved ? JSON.parse(saved) : defaultData;
         }
 
-        let achievements = initializeAchievements();
-        let wheelSpinning = false;
-
-        function saveAchievements() {
-            localStorage.setItem('achievements_pro_v2', JSON.stringify(achievements));
-            updateDisplay();
-            checkAllCompleted();
+        function saveData(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
         }
 
-        function updateDisplay() {
+        function updateAllDisplay() {
+            updateAchievements();
+            updateTasks();
+            updateShop();
+            updateCoinsCounter();
+        }
+
+        function updateCoinsCounter() {
+            const achievementCoins = achievements.filter(a => a.unlocked).length * COINS_PER_ACHIEVEMENT;
+            const tasksCoins = tasks.filter(t => t.completed).reduce((sum, t) => sum + t.reward, 0);
+            const totalCoins = achievementCoins + tasksCoins;
+            document.getElementById('totalCoins').textContent = totalCoins;
+        }
+
+        function updateAchievements() {
             const grid = document.getElementById('achievementsGrid');
             grid.innerHTML = '';
 
             achievements.forEach((ach, index) => {
-                const card = document.createElement('div');
                 const isHiddenAndLocked = ach.hidden && !ach.unlocked;
+                const card = document.createElement('div');
                 card.className = `achievement-card ${ach.unlocked ? 'unlocked' : 'locked'} ${isHiddenAndLocked ? 'hidden-achievement' : ''}`;
-                card.id = `achievement-${index}`;
-                
+
                 if (isHiddenAndLocked) {
                     card.innerHTML = `
-                        <div class="image-container no-image" style="background:#FAF8F9; border-color:#EAE2E4;">
-                            <span style="letter-spacing:1px; font-size:0.75rem; color:#A88A93; font-weight:600;">OCULTO</span>
+                        <div class="image-container no-image" style="background:#FAF8F9;">
+                            <span>OCULTO</span>
                             <input type="file" class="image-input-wrapper" accept="image/*" onchange="handleImageUpload(event, ${index})">
                         </div>
-                        <div class="card-content-wrapper">
-                            <img src="${ach.badgeUrl}" class="badge-img" alt="Insignia oculta" style="cursor: default;">
-                            <div class="card-text-area">
-                                <div class="achievement-header">
-                                    <div class="achievement-title" style="color: #8A757C;">Logro no revelado</div>
-                                </div>
-                                <div class="achievement-desc" style="color: #A8989D;">Continúa avanzando para descubrir este registro</div>
+                        <div class="card-content">
+                            <img src="${ach.badgeUrl}" class="badge-img" alt="Insignia oculta">
+                            <div class="card-text">
+                                <div class="achievement-title">Logro no revelado</div>
+                                <div class="achievement-desc">Continúa para descubrir</div>
                                 <div class="achievement-stats">
-                                    <div class="percentage"><span class="percentage-value">?</span> lo tienen</div>
-                                    <div class="checkbox-container">
+                                    <div>
                                         <input type="checkbox" class="checkbox" onchange="toggleAchievement(${index}, this)">
-                                        <span class="coins-reward">+${COINS_PER_ACHIEVEMENT}</span>
+                                        <span>+${COINS_PER_ACHIEVEMENT}</span>
                                     </div>
                                 </div>
                             </div>
@@ -819,20 +598,17 @@
                         ${imageContainer}
                         ${!ach.unlocked ? '<div class="locked-overlay">Pendiente</div>' : ''}
                         
-                        <div class="card-content-wrapper">
-                            <img src="${ach.badgeUrl}" class="badge-img" alt="Insignia" style="cursor: default;">
-                            <div class="card-text-area">
-                                <div class="achievement-header">
-                                    <span class="achievement-icon" style="color:${ach.unlocked ? '#A8546C' : '#968389'}">${ach.icon}</span>
-                                    <div class="achievement-title editable" ondblclick="editTitle(${index}, this)">${ach.title}</div>
-                                </div>
-                                <div class="achievement-desc editable" ondblclick="editDesc(${index}, this)">${ach.description}</div>
+                        <div class="card-content">
+                            <img src="${ach.badgeUrl}" class="badge-img" alt="Insignia">
+                            <div class="card-text">
+                                <div class="achievement-title editable" ondblclick="editAchievementTitle(${index}, this)">${ach.title}</div>
+                                <div class="achievement-desc editable" ondblclick="editAchievementDesc(${index}, this)">${ach.description}</div>
                                 <div class="achievement-stats">
-                                    <div class="percentage"><span class="percentage-value">${ach.percentage}%</span> completado</div>
-                                    <div class="checkbox-container">
+                                    <span>${ach.percentage}%</span>
+                                    <label>
                                         <input type="checkbox" class="checkbox" ${ach.unlocked ? 'checked' : ''} onchange="toggleAchievement(${index}, this)">
-                                        <span class="coins-reward">+${COINS_PER_ACHIEVEMENT}</span>
-                                    </div>
+                                        +${COINS_PER_ACHIEVEMENT}
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -840,8 +616,102 @@
                 }
                 grid.appendChild(card);
             });
+        }
 
-            updateCoinsDisplay();
+        function updateTasks() {
+            const grid = document.getElementById('tasksGrid');
+            grid.innerHTML = '';
+
+            tasks.forEach((task, index) => {
+                const card = document.createElement('div');
+                card.className = `task-card ${task.completed ? 'completed' : ''}`;
+
+                card.innerHTML = `
+                    <div class="task-header">
+                        <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index}, this)">
+                        <div class="task-title editable" ondblclick="editTaskTitle(${index}, this)">${task.title}</div>
+                    </div>
+                    <div class="task-description editable" ondblclick="editTaskDesc(${index}, this)">${task.description}</div>
+                    <div class="task-difficulty difficulty-${task.difficulty}">${task.difficulty.toUpperCase()}</div>
+                    <div class="task-reward">💰 +${task.reward}</div>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('tasksCompleted').textContent = tasks.filter(t => t.completed).length;
+            document.getElementById('totalTasks').textContent = tasks.length;
+            document.getElementById('tasksCoins').textContent = tasks.filter(t => t.completed).reduce((sum, t) => sum + t.reward, 0);
+        }
+
+        function updateShop() {
+            const grid = document.getElementById('shopGrid');
+            grid.innerHTML = '';
+
+            const totalCoins = getTotalCoins();
+
+            shopItems.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = `shop-item ${item.purchased ? 'purchased' : ''}`;
+
+                const imageContainer = item.image 
+                    ? `<div class="shop-item-image"><img src="${item.image}" alt="${item.name}"></div>`
+                    : `<div class="shop-item-image" style="color: #968389; font-size: 3rem;">📦</div>`;
+
+                card.innerHTML = `
+                    ${item.purchased ? '<div class="purchased-badge">✓ Comprado</div>' : ''}
+                    ${imageContainer}
+                    <div class="shop-item-name editable" ondblclick="editShopName(${index}, this)">${item.name}</div>
+                    <div class="shop-item-description editable" ondblclick="editShopDesc(${index}, this)">${item.description}</div>
+                    <div class="shop-item-price">
+                        <span>💰 ${item.price}</span>
+                    </div>
+                    <button class="buy-button" onclick="buyItem(${index})" ${item.purchased || totalCoins < item.price ? 'disabled' : ''}>
+                        ${item.purchased ? 'Comprado' : 'Comprar'}
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function getTotalCoins() {
+            const achievementCoins = achievements.filter(a => a.unlocked).length * COINS_PER_ACHIEVEMENT;
+            const tasksCoins = tasks.filter(t => t.completed).reduce((sum, t) => sum + t.reward, 0);
+            return achievementCoins + tasksCoins;
+        }
+
+        function toggleAchievement(index, checkbox) {
+            achievements[index].unlocked = checkbox.checked;
+            if (checkbox.checked) animateCoins(checkbox, 10);
+            saveData('achievements_complete_v1', achievements);
+            updateAllDisplay();
+        }
+
+        function toggleTask(index, checkbox) {
+            tasks[index].completed = checkbox.checked;
+            if (checkbox.checked) animateCoins(checkbox, tasks[index].reward);
+            saveData('tasks_v1', tasks);
+            updateAllDisplay();
+        }
+
+        function buyItem(index) {
+            const totalCoins = getTotalCoins();
+            if (totalCoins >= shopItems[index].price && !shopItems[index].purchased) {
+                shopItems[index].purchased = true;
+                saveData('shop_v1', shopItems);
+                showModal('🎉 Compra Exitosa', `¡Obtuviste "${shopItems[index].name}"! 🎁`);
+                updateAllDisplay();
+            }
+        }
+
+        function animateCoins(element, amount) {
+            const rect = element.getBoundingClientRect();
+            const coin = document.createElement('div');
+            coin.className = 'coin-animation';
+            coin.textContent = `+${amount}`;
+            coin.style.left = rect.left + 'px';
+            coin.style.top = rect.top + 'px';
+            document.body.appendChild(coin);
+            setTimeout(() => coin.remove(), 1500);
         }
 
         function handleImageUpload(event, index) {
@@ -850,200 +720,128 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     achievements[index].image = e.target.result;
-                    saveAchievements();
+                    saveData('achievements_complete_v1', achievements);
+                    updateAchievements();
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        function editTitle(index, element) {
-            const currentText = achievements[index].title;
+        function editAchievementTitle(index, el) {
+            const current = achievements[index].title;
             const input = document.createElement('input');
             input.type = 'text';
-            input.value = currentText;
-            element.replaceWith(input);
+            input.value = current;
+            el.replaceWith(input);
             input.focus();
-
             const save = () => {
-                achievements[index].title = input.value.trim() || currentText;
-                saveAchievements();
+                achievements[index].title = input.value || current;
+                saveData('achievements_complete_v1', achievements);
+                updateAchievements();
             };
             input.addEventListener('blur', save);
             input.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); });
         }
 
-        function editDesc(index, element) {
-            const currentText = achievements[index].description;
+        function editAchievementDesc(index, el) {
+            const current = achievements[index].description;
             const input = document.createElement('input');
             input.type = 'text';
-            input.value = currentText;
-            element.replaceWith(input);
+            input.value = current;
+            el.replaceWith(input);
             input.focus();
-
             const save = () => {
-                achievements[index].description = input.value.trim() || currentText;
-                saveAchievements();
+                achievements[index].description = input.value || current;
+                saveData('achievements_complete_v1', achievements);
+                updateAchievements();
             };
             input.addEventListener('blur', save);
             input.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); });
         }
 
-        function toggleAchievement(index, checkbox) {
-            achievements[index].unlocked = checkbox.checked;
-            if (checkbox.checked) triggerUnlockAnimation(index);
-            saveAchievements();
+        function editTaskTitle(index, el) {
+            const current = tasks[index].title;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = current;
+            el.replaceWith(input);
+            input.focus();
+            const save = () => {
+                tasks[index].title = input.value || current;
+                saveData('tasks_v1', tasks);
+                updateTasks();
+            };
+            input.addEventListener('blur', save);
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); });
         }
 
-        function triggerUnlockAnimation(index) {
-            const card = document.getElementById(`achievement-${index}`);
-            if (!card) return;
-
-            const rect = card.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            for (let i = 0; i < 3; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'float-particle';
-                particle.textContent = '✨';
-                
-                const tx = (i - 1) * 30;
-                particle.style.left = `${centerX + tx}px`;
-                particle.style.top = `${centerY}px`;
-                
-                document.body.appendChild(particle);
-                setTimeout(() => particle.remove(), 1500);
-            }
+        function editTaskDesc(index, el) {
+            const current = tasks[index].description;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = current;
+            el.replaceWith(input);
+            input.focus();
+            const save = () => {
+                tasks[index].description = input.value || current;
+                saveData('tasks_v1', tasks);
+                updateTasks();
+            };
+            input.addEventListener('blur', save);
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); });
         }
 
-        function updateCoinsDisplay() {
-            const totalCoins = achievements.filter(a => a.unlocked).length * COINS_PER_ACHIEVEMENT;
-            document.getElementById('coinsCount').textContent = totalCoins;
-            document.getElementById('progressFill').style.width = `${(totalCoins / MAX_COINS) * 100}%`;
+        function editShopName(index, el) {
+            const current = shopItems[index].name;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = current;
+            el.replaceWith(input);
+            input.focus();
+            const save = () => {
+                shopItems[index].name = input.value || current;
+                saveData('shop_v1', shopItems);
+                updateShop();
+            };
+            input.addEventListener('blur', save);
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); });
         }
 
-        function checkAllCompleted() {
-            const allCompleted = achievements.every(a => a.unlocked);
-            if (allCompleted) {
-                showCongratsModal();
-            }
+        function editShopDesc(index, el) {
+            const current = shopItems[index].description;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = current;
+            el.replaceWith(input);
+            input.focus();
+            const save = () => {
+                shopItems[index].description = input.value || current;
+                saveData('shop_v1', shopItems);
+                updateShop();
+            };
+            input.addEventListener('blur', save);
+            input.addEventListener('keydown', (e) => { if (e.key === 'Enter') save(); });
         }
 
-        function showCongratsModal() {
-            const modal = document.getElementById('congratsModal');
-            modal.classList.add('active');
-            createConfetti();
-        }
-
-        function closeCongratsModal() {
-            const modal = document.getElementById('congratsModal');
-            modal.classList.remove('active');
-            document.getElementById('prizeResult').classList.remove('show');
-            document.getElementById('spinBtn').disabled = false;
-            wheelSpinning = false;
-        }
-
-        function spinWheel() {
-            if (wheelSpinning) return;
-            wheelSpinning = true;
+        function switchTab(tab) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             
-            const wheel = document.getElementById('prizeWheel');
-            const spinBtn = document.getElementById('spinBtn');
-            spinBtn.disabled = true;
-            
-            wheel.classList.remove('spinning');
-            void wheel.offsetWidth;
-            wheel.classList.add('spinning');
-
-            const randomSpin = Math.floor(Math.random() * 360) + 1080;
-            setTimeout(() => {
-                wheel.style.transform = `rotate(${randomSpin}deg)`;
-                
-                setTimeout(() => {
-                    const prizeIndex = Math.floor((360 - (randomSpin % 360)) / 60) % 6;
-                    showPrizeResult(prizeIndex);
-                    spinBtn.disabled = false;
-                    wheelSpinning = false;
-                }, 3000);
-            }, 50);
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
         }
 
-        function showPrizeResult(prizeIndex) {
-            const prize = prizes[prizeIndex];
-            const prizeResult = document.getElementById('prizeResult');
-            document.getElementById('prizeEmoji').textContent = prize.emoji;
-            document.getElementById('prizeText').textContent = prize.text;
-            
-            prizeResult.classList.add('show');
-            createPrizeConfetti(prize.emoji);
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modal').classList.add('active');
         }
 
-        function createConfetti() {
-            const confettiPieces = ['🎉', '✨', '🎊', '⭐', '🌟', '💫', '🎈', '🎆'];
-            
-            for (let i = 0; i < 30; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'float-particle';
-                confetti.textContent = confettiPieces[Math.floor(Math.random() * confettiPieces.length)];
-                
-                const x = Math.random() * window.innerWidth;
-                const y = Math.random() * window.innerHeight;
-                
-                confetti.style.left = x + 'px';
-                confetti.style.top = y + 'px';
-                confetti.style.fontSize = (Math.random() * 1 + 0.8) + 'rem';
-                
-                document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 1500);
-            }
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
         }
 
-        function createPrizeConfetti(emoji) {
-            for (let i = 0; i < 15; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'float-particle';
-                confetti.textContent = emoji;
-                
-                const x = window.innerWidth / 2;
-                const y = window.innerHeight / 2;
-                const angle = (i / 15) * Math.PI * 2;
-                const distance = 100;
-                
-                confetti.style.left = x + 'px';
-                confetti.style.top = y + 'px';
-                confetti.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
-                confetti.style.animation = `floatUp 1.5s ease-out forwards`;
-                
-                document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 1500);
-            }
-        }
-
-        function resetAllAchievements() {
-            if (confirm('¿Deseas restablecer el progreso de esta plantilla?')) {
-                achievements = achievements.map(ach => ({ ...ach, unlocked: false }));
-                saveAchievements();
-                closeCongratsModal();
-            }
-        }
-
-        function exportProgress() {
-            const unlocked = achievements.filter(a => a.unlocked).length;
-            const pts = unlocked * COINS_PER_ACHIEVEMENT;
-            let txt = `REPORTE DE LOGROS\n=================\nPuntos: ${pts}/${MAX_COINS}\nCompletados: ${unlocked}/${TOTAL_ACHIEVEMENTS}\n\n`;
-            
-            achievements.forEach((a, i) => {
-                txt += `[${a.unlocked ? 'X' : ' '}] ${a.title}\n`;
-            });
-
-            const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `reporte_logros.txt`;
-            link.click();
-        }
-
-        updateDisplay();
+        updateAllDisplay();
     </script>
 </body>
 </html>
